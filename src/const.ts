@@ -13,3 +13,10 @@ export const RESPONSERS = {
 
   DEFAULT: defaultResponser,
 };
+
+export const EMOTIONS = {
+  omg: '😱',
+  sad: '😒',
+  hmm: '🤔',
+  think: '😀',
+};

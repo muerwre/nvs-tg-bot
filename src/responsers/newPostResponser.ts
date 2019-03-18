@@ -4,6 +4,7 @@ import bot from '../bot';
 import { getLargestThumb } from "../utils/vk_media";
 import * as express from 'express';
 import { makeKB } from "../utils/merkup";
+import { EMOTIONS } from "../const";
 const { Extra, Markup } = require('telegraf');
 
 interface INewPostObject {
@@ -14,7 +15,9 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const { body: { object } } = req;
   const { text, attachments } = object;
 
-  const extras = makeKB(0, 0, 0, 0);
+  const extras = makeKB(Object.keys(EMOTIONS).map(() => 0));
+
+  console.log('extras', Object.keys(EMOTIONS).map(() => 0));
 
   const textSent = await bot.telegram.sendMessage(CONFIG.TELEGRAM.chat, text, extras)
     .then(() => true)

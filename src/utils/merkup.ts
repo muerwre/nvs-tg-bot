@@ -1,9 +1,12 @@
+import { EMOTIONS } from "../const";
+
 const { Extra } = require('telegraf');
 
-export const makeKB = (omg: number, sad: number, think: number, yeah: number) => Extra.HTML().markup(m => m.inlineKeyboard([
-  m.callbackButton(`😱‍ ${omg}`, `emo ${omg + 1} ${sad} ${think} ${yeah}`),
-  m.callbackButton(`😒 ${sad}`, `emo ${omg} ${sad + 1} ${think} ${yeah}`),
-  m.callbackButton(`🤔 ${think}`, `emo ${omg} ${sad} ${think + 1} ${yeah}`),
-  m.callbackButton(`😀 ${yeah}`, `emo ${omg} ${sad} ${think} ${yeah + 1}`),
-]));
+export const makeKB = (emotions: number[]) => Extra.HTML().markup(m => m.inlineKeyboard(Object.values(EMOTIONS).map((emo: string, i: number) => (
+  m.callbackButton(
+    `${emo}‍ ${emotions[i]}`,
+    `emo ${emotions.map((em2, i2) => (i2 === i ? (em2 || 0) + 1 : (em2 || 0))).join(' ')}`
+  )
+))));
 
+// m.callbackButton(`😱‍ ${omg}`, `emo ${omg + 1} ${sad} ${think} ${yeah}`),

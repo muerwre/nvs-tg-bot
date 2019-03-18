@@ -1,0 +1,21 @@
+{
+  "allowSyntheticDefaultImports": true,
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
+    "target": "es6",
+    "jsx": "react",
+    "lib": [ "es2015", "DOM", "es6" ],
+    "baseUrl": ".",
+    "paths": {
+      "$config/*": [ "./config/*" ]
+    }
+  },
+  "include": [
+    "./**/*",
+    "./custom.d.ts"
+  ]
+}

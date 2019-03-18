@@ -1,0 +1,21 @@
+/node_modules
+/dist
+/npm-debug.log
+/.idea
+/coverage
+/coverage/*
+/flow-coverage
+/flow-coverage/*
+.vscode
+.DS_Store
+yarn-error.log
+.awcache
+
+/osrm/pbf
+/osrm/pbf/*
+
+/config/server.ts
+
+# Bundle
+*.js.map
+stats.json

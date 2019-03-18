@@ -1,11 +1,17 @@
-const handler = async (req, res) => {
-  const { body, body: { type, group_id, secret } } = req;
-  console.log('[POST] REQ IS', { type, group_id, secret });
+import { CONFIG } from '../../../config/server';
 
-  return res.send({
-    success: true,
-    // req,
-  });
+const handler = async (req, res) => {
+  const { body: { type, group_id, secret } } = req;
+
+  if (group_id !== CONFIG.VK.group_id || secret !== CONFIG.VK.secret_key) {
+    return res.status(401).send('Invalid credentials');
+  }
+
+  if (type && type ==='confirmation') {
+    return res.send(CONFIG.VK.test_response);
+  }
+
+  return res.status(404).send('Invalid credentials');
 };
 
 export default handler;

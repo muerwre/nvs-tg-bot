@@ -11,9 +11,6 @@
 yarn-error.log
 .awcache
 
-/osrm/pbf
-/osrm/pbf/*
-
 /config/server.ts
 
 # Bundle

@@ -1,6 +1,6 @@
 const handler = async (req, res) => {
-  // const { query: { name } } = req;
-  console.log('[POST] REQ IS', req);
+  const { body, body: { type, group_id, secret } } = req;
+  console.log('[POST] REQ IS', { type, group_id, secret });
 
   return res.send({
     success: true,

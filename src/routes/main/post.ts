@@ -14,6 +14,7 @@ const handler = async (req, res) => {
   }
 
   return res.status(404).send('Invalid credentials');
+
 };
 
 export default handler;

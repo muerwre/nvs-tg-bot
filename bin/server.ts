@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { CONFIG } from '../config/server';
 
-import index from '../src/index'
-import * as http from 'http';
-// import * as fs from 'fs';
- // const https = require('https');
+const index = require('../src/index');
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
 
 if (CONFIG.HTTP.ENABLED) {
   const httpPort = CONFIG.HTTP.PORT;

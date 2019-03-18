@@ -1,7 +1,9 @@
 import { CONFIG } from '../../../config/server';
 
 const handler = async (req, res) => {
-  const { body: { type, group_id, secret } } = req;
+  const { body, body: { type, group_id, secret } } = req;
+
+  console.log('BODY IS', body);
 
   if (group_id !== CONFIG.VK.group_id || secret !== CONFIG.VK.secret_key) {
     return res.status(401).send('Invalid credentials');

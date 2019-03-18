@@ -53,7 +53,9 @@
     "morgan": "^1.9.1",
     "path": "^0.12.7",
     "pug": "2.0.0-beta11",
-    "scrypt": "^6.0.3"
+    "scrypt": "^6.0.3",
+    "socks-proxy-agent": "^4.0.2",
+    "telegraf": "^3.27.1"
   },
   "author": "",
   "license": "ISC"

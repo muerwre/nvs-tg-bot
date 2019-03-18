@@ -1,9 +1,9 @@
 import { CONFIG } from '$config/server';
-import { RESPONSERS, TYPES } from "../../const";
-import { confirmationResponser } from "../../responsers/confirmationResponser";
+import { RESPONSERS } from "../../const";
+import * as express from 'express';
 
-const handler = async (req, res) => {
-  const { body, body: { type, group_id, secret } } = req;
+const handler = async (req: express.Request, res: express.Response): Promise<express.Response> => {
+  const { body: { type, group_id, secret } } = req;
 
   if (group_id !== CONFIG.VK.group_id || secret !== CONFIG.VK.secret_key) {
     return res.status(401).send('Invalid credentials');

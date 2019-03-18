@@ -23,35 +23,44 @@ bot.on('message', function (ctx, next) {
   console.log("GOT IT!", ctx.message.chat.id);
 });
 
-bot.action(/emo (([\d]?\s?)+)/, async (ctx) => {
+// emo \[(\d+)\] (([\d]?\s?)+)
+
+bot.action(/emo \[(\d+)\]/, async (ctx) => {
   const { message = {}, from = {} } = ctx && ctx.update && ctx.update.callback_query || { };
   const { match = [] } = ctx;
-  const datas = match && match[1] && match[1].split(' ');
+  const emo_id = (match[1] && parseInt(match[1])) || 0;
 
-  if (!message.message_id || !from.id || !datas || datas.length < 1) return;
+  if (!message.message_id || !from.id) return;
 
-  const emotions = datas.slice(0, Object.keys(EMOTIONS).length).map(emo => (parseInt(emo) || 0));
   const user_id = from.id;
   const message_id = message.message_id;
 
-  console.log({ emotions, message, from });
+  console.log({ emo_id });
 
   const vote = await Vote.findOne({ user_id, message_id });
 
   console.log({ vote });
 
   if (!vote) {
-    console.log('new vote :-)');
-
-    await Vote.create({ user_id, message_id, emo_id: 1 }, (err, result) => {
+    await Vote.create({ user_id, message_id, emo_id }, (err, result) => {
       return result.toObject();
     });
-
-    await ctx.editMessageText(message.text, makeKB(emotions)).catch(() => false);
   } else {
-    console.log('user already voted');
+    await vote.set({ emo_id }).save();
   }
 
+  const emos = await Vote.find({ message_id }).then(result => (
+    result.reduce((obj, emo) => ({
+      ...obj,
+      [emo.emo_id]: (obj[emo.emo_id] || 0) + 1,
+    }), {})
+  ));
+
+  const list = Object.keys(EMOTIONS).map((em, i) => (
+    emos[i] || 0
+  ));
+
+  await ctx.editMessageText(message.text, makeKB(list)).catch(() => false);
 });
 
 bot.launch();

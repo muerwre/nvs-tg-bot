@@ -18,7 +18,11 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
 
   const textSent = await bot.telegram.sendMessage(CONFIG.TELEGRAM.chat, text, extras)
     .then(() => true)
-    .catch(() => false);
+    .catch(err => {
+      console.log('err', err);
+
+      return false;
+    });
 
   // if (attachments && attachments.length > 0) {
   //   const media = attachments

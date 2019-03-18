@@ -1,4 +1,4 @@
-import { CONFIG } from '../../../config/server';
+import { CONFIG } from '$config/server';
 import { TYPES } from "../../const";
 
 const handler = async (req, res) => {

@@ -1,6 +1,7 @@
 import { CONFIG } from "$config/server";
 import { makeKB } from "../utils/merkup";
 import { EMOTIONS } from "../const";
+import { Vote } from "../models/Vote";
 
 const SocksProxyAgent = require('socks-proxy-agent');
 const Telegraf = require('telegraf');
@@ -30,10 +31,27 @@ bot.action(/emo (([\d]?\s?)+)/, async (ctx) => {
   if (!message.message_id || !from.id || !datas || datas.length < 1) return;
 
   const emotions = datas.slice(0, Object.keys(EMOTIONS).length).map(emo => (parseInt(emo) || 0));
+  const user_id = from.id;
+  const message_id = message.message_id;
 
-  console.log({ emotions });
+  console.log({ emotions, message, from });
 
-  await ctx.editMessageText(message.text, makeKB(emotions)).catch(() => false);
+  const vote = await Vote.findOne({ user_id, message_id });
+
+  console.log({ vote });
+
+  if (!vote) {
+    console.log('new vote :-)');
+
+    await Vote.create({ user_id, message_id, emo_id: 1 }, (err, result) => {
+      return result.toObject();
+    });
+
+    await ctx.editMessageText(message.text, makeKB(emotions)).catch(() => false);
+  } else {
+    console.log('user already voted');
+  }
+
 });
 
 bot.launch();

@@ -8,7 +8,7 @@ import * as cookieParser from 'cookie-parser'
 import * as lessMiddleware from 'less-middleware';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
-
+import '$config/db';
 import mainRouter from './routes/main'
 
 const app = express();

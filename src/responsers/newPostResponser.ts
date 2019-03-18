@@ -1,11 +1,8 @@
 import { CONFIG } from "$config/server";
-// import telegram from "../bot/telegram";
 import bot from '../bot';
-import { getLargestThumb } from "../utils/vk_media";
 import * as express from 'express';
 import { makeKB } from "../utils/merkup";
 import { EMOTIONS } from "../const";
-const { Extra, Markup } = require('telegraf');
 
 interface INewPostObject {
 

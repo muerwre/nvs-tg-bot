@@ -1,1 +1,1 @@
-export const defaultResponser = (req, res) => res.send({ success: true, status: 'unknown request' });
+export const defaultResponser = async (req, res) => true;

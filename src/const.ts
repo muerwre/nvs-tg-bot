@@ -1,15 +1,24 @@
 import { confirmationResponser } from "./responsers/confirmationResponser";
 import { defaultResponser } from "./responsers/defaultResponser";
 import { newPostResponser } from "./responsers/newPostResponser";
+import { TYPES } from "$config/server";
+import * as express from 'express';
+import { groupJoinResponder } from "./responsers/groupJoinResponder";
 
-export const TYPES = {
-  CONFIRMATION: 'confirmation',
-  NEW_POST: 'wall_post_new',
-};
+// export const TYPES = {
+//   CONFIRMATION: 'confirmation',
+//   NEW_POST: 'wall_post_new',
+// };
 
-export const RESPONSERS = {
+interface IResponsers {
+  [x: string]: (req: express.Request, res: express.Response, chat?: string) => Promise<any>,
+}
+
+export const RESPONSERS: IResponsers = {
   [TYPES.CONFIRMATION]: confirmationResponser,
   [TYPES.NEW_POST]: newPostResponser,
+  [TYPES.GROUP_JOIN]: groupJoinResponder,
+  [TYPES.GROUP_LEAVE]: groupJoinResponder,
   DEFAULT: defaultResponser,
 };
 

@@ -76,7 +76,10 @@ export interface INewPostObject {
   secret: string,
 }
 
-export const newPostResponser = async (req: express.Request, res: express.Response): Promise<express.Response> => {
+export const newPostResponser = async (req: express.Request, res: express.Response, chat?: string): Promise<boolean> => {
+  console.log('sending data to', { chat });
+  if (!chat) return;
+
   const { object, group_id } = req.body as INewPostObject;
   const { text, attachments } = object;
 
@@ -93,9 +96,9 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   //     .catch(() => false);
   // }
 
-  const exist = await Post.findOne({ chat: CONFIG.TELEGRAM.chat, group_id: group_id, post_id: object.id });
+  const exist = await Post.findOne({ chat, group_id: group_id, post_id: object.id });
 
-  if (exist) return res.send(OK_RESPONSE);
+  // if (exist) return;
 
   const text_limit = is_image_post ? CONFIG.POSTS.char_limit_image : CONFIG.POSTS.char_limit_text;
   const is_cutted = (text.length > text_limit);
@@ -120,7 +123,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const message = is_image_post
     ?
       await bot.telegram.sendPhoto(
-        CONFIG.TELEGRAM.chat,
+        chat,
         images[0].media,
         {
           caption: cutText(text, text_limit),
@@ -131,7 +134,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
       )
     :
       await bot.telegram.sendMessage(
-        CONFIG.TELEGRAM.chat,
+        chat,
         cutText(text, text_limit),
         extras,
       ).catch(() => false);
@@ -149,9 +152,9 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
       topic_url,
     });
 
-    return res.send(OK_RESPONSE);
+    return;
   } else {
-    return res.send(OK_RESPONSE);
+    return;
   }
 
 

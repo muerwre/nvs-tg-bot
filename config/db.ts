@@ -10,12 +10,12 @@ const {
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 
+//
 const url = CONFIG.DB.NEEDS_AUTH
   ? `mongodb://${USER}:${PASSWORD}@${HOSTNAME}:${PORT}/${DATABASE}`
-  : `mongodb://${HOSTNAME}:${PORT}/${DATABASE}`;
+  : `mongodb://${HOSTNAME}:${PORT}/${DATABASE}?authSource=adminB&w=1`;
 
 mongoose.connect(url);
-
 mongoose.set('debug', true);
 // mongoose.createConnection(PORT, HOSTNAME, { user: USER, pass: PASSWORD, auth: { authdb: 'admin' } });
 const database = mongoose.connection;

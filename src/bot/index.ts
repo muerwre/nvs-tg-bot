@@ -21,8 +21,6 @@ bot.on('message', async (ctx, next) => {
   // return await ctx.replyWithAnimation('https://media.giphy.com/media/LrmU6jXIjwziE/giphy.gif');
 });
 
-// emo \[(\d+)\] (([\d]?\s?)+)
-
 bot.action(/emo \[(\d+)\]/, async (ctx) => {
   const { message = {}, from = {} } = ctx && ctx.update && ctx.update.callback_query || { };
   const { match = [] } = ctx;
@@ -38,10 +36,8 @@ bot.action(/emo \[(\d+)\]/, async (ctx) => {
   console.log({ vote });
 
   if (vote) {
-    console.log('will update vote');
     await vote.set({ emo_id }).save();
   } else {
-    console.log('will create vote');
     await Vote.create({ user_id, message_id, emo_id, chat_id });
   }
 
@@ -52,8 +48,6 @@ bot.action(/emo \[(\d+)\]/, async (ctx) => {
       [emo.emo_id]: (obj[emo.emo_id] || 0) + 1,
     }), {})
   ));
-
-  console.log('getting emos for this post', { emos });
 
   // create like array filled with likes from db
   const list = Object.keys(EMOTIONS).map((em, i) => (emos[i] || 0));

@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 // Schemas
 export const PostSchema = new Schema(
   {
+    chat: { type: String, required: true },
     chat_id: { type: Number, required: true },
     message_id: { type: Number, required: true },
     group_id: { type: Number, required: true },

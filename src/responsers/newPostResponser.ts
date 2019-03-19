@@ -53,6 +53,8 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const { object, group_id } = req.body as INewPostObject;
   const { text, attachments } = object;
 
+  console.log('req body:', { body: req.body });
+
   const images = attachments && parseAttachments(attachments).slice(0, CONFIG.POSTS.max_thumbs);
   const is_image_post = CONFIG.POSTS.attach_images && images && images.length > 0;
 
@@ -61,6 +63,10 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   //     .then(() => true)
   //     .catch(() => false);
   // }
+
+  const exist = await Post.findOne({ chat: CONFIG.TELEGRAM.chat, group_id: group_id, post_id: object.id });
+
+  if (exist) return res.send(OK_RESPONSE);
 
   const text_limit = is_image_post ? CONFIG.POSTS.char_limit_image : CONFIG.POSTS.char_limit_text;
   const is_cutted = (text.length > text_limit);
@@ -101,6 +107,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
 
   if (message) {
     await Post.create({
+      chat: `@${message.chat.username}`,
       chat_id: message.chat.id,
       message_id: message.message_id,
       group_id: group_id,
@@ -109,6 +116,8 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
       post_url: makePostUrl(group_id, object.id),
       map_url: getMapUrl(text),
     });
+
+    console.log({ message });
 
     return res.send(OK_RESPONSE);
   } else {

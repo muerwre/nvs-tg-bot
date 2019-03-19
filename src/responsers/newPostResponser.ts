@@ -54,6 +54,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const { text, attachments } = object;
 
   const images = attachments && parseAttachments(attachments).slice(0, CONFIG.POSTS.max_thumbs);
+  const is_image_post = CONFIG.POSTS.attach_images && images && images.length > 0;
 
   // if (CONFIG.POSTS.attach_images && images && images.length) {
   //   await bot.telegram.sendMediaGroup(CONFIG.TELEGRAM.chat, images, { disable_notification: true })
@@ -61,7 +62,8 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   //     .catch(() => false);
   // }
 
-  const is_cutted = (text.length > CONFIG.POSTS.char_limit);
+  const text_limit = is_image_post ? CONFIG.POSTS.char_limit_image : CONFIG.POSTS.char_limit_text;
+  const is_cutted = (text.length > text_limit);
 
   const extras = {
     reply_markup: {
@@ -78,13 +80,13 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
     disable_web_page_preview: true,
   };
 
-  const message = CONFIG.POSTS.attach_images && images && images.length > 0
+  const message = is_image_post
     ?
       await bot.telegram.sendPhoto(
         CONFIG.TELEGRAM.chat,
         images[0].media,
         {
-          caption: cutText(text),
+          caption: cutText(text, text_limit),
           parse_mode: 'Markdown',
           disable_web_page_preview: true,
           ...extras,
@@ -93,11 +95,9 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
     :
       await bot.telegram.sendMessage(
         CONFIG.TELEGRAM.chat,
-        cutText(text),
+        cutText(text, text_limit),
         extras,
       ).catch(() => false);
-
-  console.log('is cutted?', is_cutted, text.length, CONFIG.POSTS.char_limit);
 
   if (message) {
     await Post.create({
@@ -109,8 +109,6 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
       post_url: makePostUrl(group_id, object.id),
       map_url: getMapUrl(text),
     });
-
-    console.log({ message });
 
     return res.send({ success: true });
   } else {

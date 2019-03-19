@@ -25,9 +25,13 @@ export const parseAttachments = (attachments: IAttachment[] = []) => attachments
 
 // https://vk.com/wall-46909317_26
 export const makePostUrl = (group_id: number, post_id: number): string => GROUPS[group_id]
-  ? `https://vk.com/wall-${group_id}_${post_id}`
-  : `https://vk.com/${GROUPS[group_id]}?w=wall-${group_id}_${post_id}`;
+  ? `https://vk.com/${GROUPS[group_id]}?w=wall-${group_id}_${post_id}`
+  : `https://vk.com/wall-${group_id}_${post_id}`;
 
-export const getMapUrl = (text: string): string => 'http://someurl.com/';
+export const getMapUrl = (text: string): string => {
+  const match = text && text.match(/(http|https):\/\/(map|alpha-map)\.vault48\.org\/[A-Za-z\_]+/);
 
-export const cutText = (text: string): string => `${text.substr(0, CONFIG.POSTS.char_limit)}${text.length > CONFIG.POSTS.char_limit ? '...' : ''}`;
+  return (match && match[0]) || '';
+};
+
+export const cutText = (text: string, limit: number): string => `${text.substr(0, limit)}${text.length > limit ? '...' : ''}`;

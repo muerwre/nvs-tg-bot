@@ -22,4 +22,5 @@ export const EMOTIONS = {
 
 export const GROUPS = {
   46909317: 'upferr',
+  124752609: 'pogonia_nsk',
 };

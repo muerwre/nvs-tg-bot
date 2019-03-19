@@ -58,16 +58,11 @@ bot.action(/emo \[(\d+)\]/, async (ctx) => {
   // create like array filled with likes from db
   const list = Object.keys(EMOTIONS).map((em, i) => (emos[i] || 0));
 
-  console.log('preparing list for this', { list });
-
   const post = await Post.findOne({ chat_id, message_id });
   const { map_url = null, post_url = null, is_cutted = false } = post;
 
-  console.log('got data for this post', { map_url, post_url, is_cutted });
-
   const extras = { inline_keyboard: makeKB(list, { map_url, post_url, is_cutted }) };
 
-  // await ctx.editMessageText(message.text, extras).catch(console.log);
   await ctx.editMessageReplyMarkup(extras).catch(console.log);
 });
 

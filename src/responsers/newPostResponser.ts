@@ -2,7 +2,7 @@ import { CONFIG } from "$config/server";
 import bot from '../bot';
 import * as express from 'express';
 import { makeKB } from "../utils/merkup";
-import { EMOTIONS } from "../const";
+import { EMOTIONS, OK_RESPONSE } from "../const";
 import { cutText, getMapUrl, makePostUrl, parseAttachments } from "../utils/vk_media";
 import { Post } from "../models/Post";
 
@@ -110,9 +110,9 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
       map_url: getMapUrl(text),
     });
 
-    return res.send(CONFIG.VK.test_response);
+    return res.send(OK_RESPONSE);
   } else {
-    return res.send(CONFIG.VK.test_response);
+    return res.send(OK_RESPONSE);
   }
 
 

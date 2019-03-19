@@ -7,7 +7,7 @@ import { Post } from "../models/Post";
 const SocksProxyAgent = require('socks-proxy-agent');
 const Telegraf = require('telegraf');
 
-const agent = new SocksProxyAgent(CONFIG.PROXY);
+const agent = (CONFIG.PROXY && new SocksProxyAgent(CONFIG.PROXY)) || null;
 const options = {
   channelMode: true,
   telegram: { agent },

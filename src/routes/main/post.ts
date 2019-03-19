@@ -5,6 +5,8 @@ import * as express from 'express';
 const handler = async (req: express.Request, res: express.Response): Promise<express.Response> => {
   const { body: { type, group_id, secret } } = req;
 
+  console.log('body', req.body);
+
   if (group_id !== CONFIG.VK.group_id || secret !== CONFIG.VK.secret_key) {
     return res.status(401).send('Invalid credentials');
   }

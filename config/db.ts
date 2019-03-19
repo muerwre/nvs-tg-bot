@@ -12,8 +12,8 @@ mongoose.Promise = require('bluebird');
 
 //
 const url = CONFIG.DB.NEEDS_AUTH
-  ? `mongodb://${USER}:${PASSWORD}@${HOSTNAME}:${PORT}/${DATABASE}`
-  : `mongodb://${HOSTNAME}:${PORT}/${DATABASE}?authSource=admin&w=1`;
+  ? `mongodb://${USER}:${PASSWORD}@${HOSTNAME}:${PORT}/${DATABASE}?authSource=admin&w=1`
+  : `mongodb://${HOSTNAME}:${PORT}/${DATABASE}`;
 
 mongoose.connect(url);
 mongoose.set('debug', true);

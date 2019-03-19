@@ -110,9 +110,9 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
       map_url: getMapUrl(text),
     });
 
-    return res.send({ success: true });
+    return res.send(CONFIG.VK.test_response);
   } else {
-    return res.send({ success: false });
+    return res.send(CONFIG.VK.test_response);
   }
 
 

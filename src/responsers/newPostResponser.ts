@@ -83,6 +83,10 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const { object, group_id } = req.body as INewPostObject;
   const { text, attachments } = object;
 
+  if (object.post_type !== 'post') {
+    console.log('just a suggested post :-(');
+    return true;
+  }
   // console.log('req body:', { body: req.body });
   // console.log('req attachments:', JSON.stringify(req.body.object.attachments));
 

@@ -16,7 +16,10 @@ export const RESPONSERS = {
 
 export const EMOTIONS = {
   omg: '😱',
-  sad: '😒',
   hmm: '🤔',
-  think: '😀',
+  wow: '😃',
+};
+
+export const GROUPS = {
+  46909317: 'upferr',
 };

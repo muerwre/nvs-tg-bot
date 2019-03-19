@@ -54,7 +54,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const { text, attachments } = object;
 
   console.log('req body:', { body: req.body });
-  console.log('req attachments:', JSON.stringify(req.body.object.attach_images));
+  console.log('req attachments:', JSON.stringify(req.body.object.attachments));
 
   const images = attachments && parseAttachments(attachments).slice(0, CONFIG.POSTS.max_thumbs);
   const is_image_post = CONFIG.POSTS.attach_images && images && images.length > 0;

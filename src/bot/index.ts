@@ -59,7 +59,7 @@ bot.action(/emo \[(\d+)\]/, async (ctx) => {
   const list = Object.keys(EMOTIONS).map((em, i) => (emos[i] || 0));
 
   const post = await Post.findOne({ chat_id, message_id });
-  const { map_url = null, post_url = null, is_cutted = false } = post;
+  const { map_url = null, post_url = null, is_cutted = false } = (post || {});
 
   const extras = { inline_keyboard: makeKB(list, { map_url, post_url, is_cutted }) };
 

@@ -10,7 +10,6 @@ export const TYPES = {
 export const RESPONSERS = {
   [TYPES.CONFIRMATION]: confirmationResponser,
   [TYPES.NEW_POST]: newPostResponser,
-
   DEFAULT: defaultResponser,
 };
 

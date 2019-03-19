@@ -3,7 +3,7 @@ import bot from '../bot';
 import * as express from 'express';
 import { makeKB } from "../utils/merkup";
 import { EMOTIONS } from "../const";
-import { getMapUrl, makePostUrl, parseAttachments } from "../utils/vk_media";
+import { cutText, getMapUrl, makePostUrl, parseAttachments } from "../utils/vk_media";
 import { Post } from "../models/Post";
 
 export interface IAttachment {
@@ -55,37 +55,68 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
 
   const images = attachments && parseAttachments(attachments).slice(0, CONFIG.POSTS.max_thumbs);
 
-  if (CONFIG.POSTS.attach_images && images && images.length) {
-    await bot.telegram.sendMediaGroup(CONFIG.TELEGRAM.chat, images, { disable_notification: true })
-      .then(() => true)
-      .catch(() => false);
-  }
+  // if (CONFIG.POSTS.attach_images && images && images.length) {
+  //   await bot.telegram.sendMediaGroup(CONFIG.TELEGRAM.chat, images, { disable_notification: true })
+  //     .then(() => true)
+  //     .catch(() => false);
+  // }
 
-  const message = await bot.telegram.sendMessage(
-    CONFIG.TELEGRAM.chat,
-    text,
-    {
-      ...makeKB(
+  const is_cutted = (text.length > CONFIG.POSTS.char_limit);
+
+  const extras = {
+    reply_markup: {
+      inline_keyboard: makeKB(
         Object.keys(EMOTIONS).map(() => 0),
         {
           post_url: makePostUrl(group_id, object.id),
           map_url: getMapUrl(text),
-          is_cutted: (text.length > CONFIG.POSTS.char_limit),
+          is_cutted,
         }
       ),
-      parse_mode: 'Markdown',
-      disable_web_page_preview: true,
-    }
-  )
-    .catch(console.log);
+    },
+    parse_mode: 'Markdown',
+    disable_web_page_preview: true,
+  };
 
-  await Post.create({
-    chat_id: message.chat.id,
-    message_id: message.message_id,
-    group_id: group_id,
-    post_id: object.id,
-    char_count: text.length,
-  });
+  const message = CONFIG.POSTS.attach_images && images && images.length > 0
+    ?
+      await bot.telegram.sendPhoto(
+        CONFIG.TELEGRAM.chat,
+        images[0].media,
+        {
+          caption: cutText(text),
+          parse_mode: 'Markdown',
+          disable_web_page_preview: true,
+          ...extras,
+        }
+      )
+    :
+      await bot.telegram.sendMessage(
+        CONFIG.TELEGRAM.chat,
+        cutText(text),
+        extras,
+      ).catch(() => false);
+
+  console.log('is cutted?', is_cutted, text.length, CONFIG.POSTS.char_limit);
+
+  if (message) {
+    await Post.create({
+      chat_id: message.chat.id,
+      message_id: message.message_id,
+      group_id: group_id,
+      post_id: object.id,
+      is_cutted,
+      post_url: makePostUrl(group_id, object.id),
+      map_url: getMapUrl(text),
+    });
+
+    console.log({ message });
+
+    return res.send({ success: true });
+  } else {
+    return res.send({ success: false });
+  }
+
 
   // const textSent = await bot.telegram.sendPhoto(
   //   CONFIG.TELEGRAM.chat,
@@ -112,6 +143,4 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   //     .then(() => true)
   //     .catch(() => false);
   // }
-
-  return res.send({ success: true });
 };

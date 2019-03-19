@@ -2,6 +2,7 @@ import { CONFIG } from "$config/server";
 import { makeKB } from "../utils/merkup";
 import { EMOTIONS } from "../const";
 import { Vote } from "../models/Vote";
+import { Post } from "../models/Post";
 
 const SocksProxyAgent = require('socks-proxy-agent');
 const Telegraf = require('telegraf');
@@ -37,8 +38,10 @@ bot.action(/emo \[(\d+)\]/, async (ctx) => {
   console.log({ vote });
 
   if (vote) {
+    console.log('will update vote');
     await vote.set({ emo_id }).save();
   } else {
+    console.log('will create vote');
     await Vote.create({ user_id, message_id, emo_id, chat_id });
   }
 
@@ -50,10 +53,22 @@ bot.action(/emo \[(\d+)\]/, async (ctx) => {
     }), {})
   ));
 
+  console.log('getting emos for this post', { emos });
+
   // create like array filled with likes from db
   const list = Object.keys(EMOTIONS).map((em, i) => (emos[i] || 0));
 
-  await ctx.editMessageText(message.text, makeKB(list)).catch(() => false);
+  console.log('preparing list for this', { list });
+
+  const post = await Post.findOne({ chat_id, message_id });
+  const { map_url = null, post_url = null, is_cutted = false } = post;
+
+  console.log('got data for this post', { map_url, post_url, is_cutted });
+
+  const extras = { inline_keyboard: makeKB(list, { map_url, post_url, is_cutted }) };
+
+  // await ctx.editMessageText(message.text, extras).catch(console.log);
+  await ctx.editMessageReplyMarkup(extras).catch(console.log);
 });
 
 bot.launch();

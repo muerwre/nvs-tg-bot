@@ -28,4 +28,6 @@ export const makePostUrl = (group_id: number, post_id: number): string => GROUPS
   ? `https://vk.com/wall-${group_id}_${post_id}`
   : `https://vk.com/${GROUPS[group_id]}?w=wall-${group_id}_${post_id}`;
 
-export const getMapUrl = (text: string): string => 'http://some_url/';
+export const getMapUrl = (text: string): string => 'http://someurl.com/';
+
+export const cutText = (text: string): string => `${text.substr(0, CONFIG.POSTS.char_limit)}${text.length > CONFIG.POSTS.char_limit ? '...' : ''}`;

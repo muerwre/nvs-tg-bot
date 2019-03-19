@@ -3,12 +3,12 @@ import bot from '../bot';
 import * as express from 'express';
 import { makeKB } from "../utils/merkup";
 import { EMOTIONS, OK_RESPONSE } from "../const";
-import { cutText, getMapUrl, makePostUrl, parseAttachments } from "../utils/vk_media";
+import { cutText, getAttachmentLinks, getMapUrl, makePostUrl, parseAttachments } from "../utils/vk_media";
 import { Post } from "../models/Post";
 
 export interface IAttachment {
   type: string,
-  photo: {
+  photo?: {
     id: number,
     album_id: number,
     owner_id: number,
@@ -24,6 +24,33 @@ export interface IAttachment {
     text: string,
     date: number,
     access_key: string,
+  },
+  link?: {
+    url: string,
+    title: string,
+    caption: string,
+    description: string,
+    is_external: number,
+    photo: {
+      id: number,
+      album_id: number,
+      owner_id: number,
+      user_id: number,
+      photo_75: string,
+      photo_130: string,
+      photo_604: string,
+      photo_807: string,
+      photo_1280: string,
+      photo_2560: string,
+      width: number,
+      height: number,
+      text: string,
+      date: number,
+    },
+    button: {
+      title: string,
+      url: string,
+    }
   }
 }
 
@@ -53,10 +80,11 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const { object, group_id } = req.body as INewPostObject;
   const { text, attachments } = object;
 
-  console.log('req body:', { body: req.body });
-  console.log('req attachments:', JSON.stringify(req.body.object.attachments));
+  // console.log('req body:', { body: req.body });
+  // console.log('req attachments:', JSON.stringify(req.body.object.attachments));
 
   const images = attachments && parseAttachments(attachments).slice(0, CONFIG.POSTS.max_thumbs);
+  const topics = attachments && getAttachmentLinks(attachments).slice(0, 1);
   const is_image_post = CONFIG.POSTS.attach_images && images && images.length > 0;
 
   // if (CONFIG.POSTS.attach_images && images && images.length) {
@@ -71,6 +99,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
 
   const text_limit = is_image_post ? CONFIG.POSTS.char_limit_image : CONFIG.POSTS.char_limit_text;
   const is_cutted = (text.length > text_limit);
+  const topic_url = (topics && topics[0] && topics[0].url) || null;
 
   const extras = {
     reply_markup: {
@@ -79,6 +108,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
         {
           post_url: makePostUrl(group_id, object.id),
           map_url: getMapUrl(text),
+          topic_url,
           is_cutted,
         }
       ),
@@ -116,9 +146,8 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
       is_cutted,
       post_url: makePostUrl(group_id, object.id),
       map_url: getMapUrl(text),
+      topic_url,
     });
-
-    console.log({ message });
 
     return res.send(OK_RESPONSE);
   } else {

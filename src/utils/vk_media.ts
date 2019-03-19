@@ -23,6 +23,18 @@ export const parseAttachments = (attachments: IAttachment[] = []) => attachments
     type: 'photo',
   }));
 
+export const getAttachmentLinks = (attachments: IAttachment[] = []) => attachments
+  .filter(att => (
+    att.type === 'link' &&
+    att.link &&
+    att.link.button &&
+    att.link.button.title === 'Читать'
+  ))
+  .map(att => ({
+    title: att.link.title,
+    url: att.link.url,
+  }));
+
 export const makePostUrl = (group_id: number, post_id: number): string => GROUPS[group_id]
   ? `https://vk.com/${GROUPS[group_id]}?w=wall-${group_id}_${post_id}`
   : `https://vk.com/wall-${group_id}_${post_id}`;

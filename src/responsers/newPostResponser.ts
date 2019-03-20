@@ -77,28 +77,14 @@ export interface INewPostObject {
 }
 
 export const newPostResponser = async (req: express.Request, res: express.Response, chat?: string): Promise<boolean> => {
-  console.log('sending data to', { chat });
   if (!chat) return;
 
   const { object, group_id } = req.body as INewPostObject;
   const { text, attachments } = object;
 
-  if (object.post_type !== 'post') {
-    console.log('just a suggested post :-(');
-    return true;
-  }
-  // console.log('req body:', { body: req.body });
-  // console.log('req attachments:', JSON.stringify(req.body.object.attachments));
-
   const images = attachments && parseAttachments(attachments).slice(0, CONFIG.POSTS.max_thumbs);
   const topics = attachments && getAttachmentLinks(attachments).slice(0, 1);
   const is_image_post = CONFIG.POSTS.attach_images && images && images.length > 0;
-
-  // if (CONFIG.POSTS.attach_images && images && images.length) {
-  //   await bot.telegram.sendMediaGroup(CONFIG.TELEGRAM.chat, images, { disable_notification: true })
-  //     .then(() => true)
-  //     .catch(() => false);
-  // }
 
   const exist = await Post.findOne({ chat, group_id: group_id, post_id: object.id });
 

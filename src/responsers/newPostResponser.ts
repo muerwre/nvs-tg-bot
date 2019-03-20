@@ -79,7 +79,7 @@ export interface INewPostObject {
 export const newPostResponser = async (req: express.Request, res: express.Response, chat?: string): Promise<boolean> => {
   if (!chat) return;
 
-  console.log(req.body);
+  console.log(JSON.stringify(req.body));
 
   const { object, group_id } = req.body as INewPostObject;
   const { text, attachments } = object;

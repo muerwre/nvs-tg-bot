@@ -79,8 +79,6 @@ export interface INewPostObject {
 export const newPostResponser = async (req: express.Request, res: express.Response, chat?: string): Promise<boolean> => {
   if (!chat) return;
 
-  console.log(JSON.stringify(req.body));
-
   const { object, group_id } = req.body as INewPostObject;
   const { text, attachments } = object;
 
@@ -90,7 +88,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
 
   const exist = await Post.findOne({ chat, group_id: group_id, post_id: object.id });
 
-  // if (exist) return;
+  if (exist) return;
 
   const text_limit = is_image_post ? CONFIG.POSTS.char_limit_image : CONFIG.POSTS.char_limit_text;
   const is_cutted = (text.length > text_limit);

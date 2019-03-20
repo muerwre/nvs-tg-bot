@@ -25,7 +25,7 @@ export const postSuggestionResponser = async (req: express.Request, res: express
     {
       reply_markup: {
         inline_keyboard: [[
-          { text: 'Посмотреть предложенный пост', url: makePostUrl(group_id, object.id) }
+          { text: 'Посмотреть пост', url: makePostUrl(group_id, object.id) }
         ]],
       },
       parse_mode: 'Markdown',

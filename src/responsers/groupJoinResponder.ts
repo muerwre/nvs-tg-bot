@@ -14,7 +14,7 @@ interface IUserObject {
 }
 
 export const groupJoinResponder = async (req: express.Request, res: express.Response, chat?: string): Promise<boolean> => {
-  console.log(req.body.type, chat);
+  console.log(req.body, chat);
   if (!chat) return;
 
   const { type, object: { user_id } } = req.body as IUserObject;

@@ -121,7 +121,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
           disable_web_page_preview: true,
           ...extras,
         }
-      )
+      ).catch(() => null)
     :
       await bot.telegram.sendMessage(
         chat,

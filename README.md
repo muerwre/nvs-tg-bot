@@ -18,10 +18,12 @@ cp ./config/server.example.ts ./config/server.ts
 vi ./config/server.ts
 ```
 
-Next, get group_id and verification code from VK: you need Callback API tab at your group preferences.
+Next, get group_id and verification code from VK: you'll need to check Callback API tab at your group preferences (don't forget to enable notifications for new posts and group member actions there).
 
-You should obtain bot token from BotFather https://core.telegram.org/bots.
+You should also obtain bot token from BotFather https://core.telegram.org/bots.
 
 Run it in the background as I do:
 
 ```/usr/bin/forever start -c "npm run dev" --sourceDir /opt/nvs-tg-bot/ .```
+
+Open your editor and change everything to work properly. Good luck!

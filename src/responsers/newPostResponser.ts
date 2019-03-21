@@ -96,8 +96,8 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const is_cutted = (text.length > text_limit);
   const topic_url = (topics && topics[0] && topics[0].url) || null;
 
-  const name = await getUserName(signer_id);
-  const link = (name && `\n- [${name}](https://vk.com/id${signer_id})\n`) || `\n`;
+  const name = signer_id && signer_id > 0 && await getUserName(signer_id);
+  const link = (name && `\n\n- [${name}](https://vk.com/id${signer_id})\n`) || `\n`;
 
   const extras = {
     reply_markup: {
@@ -114,8 +114,6 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
     parse_mode: 'Markdown',
     disable_web_page_preview: true,
   };
-
-  console.log('sending', { link, object });
 
   const message = is_image_post
     ?

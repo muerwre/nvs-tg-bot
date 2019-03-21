@@ -1,54 +1,13 @@
-export const TYPES = {
-  CONFIRMATION: 'confirmation',
-  NEW_POST: 'wall_post_new',
-  GROUP_JOIN: 'group_join',
-  GROUP_LEAVE: 'group_leave',
-};
+import { DEFAULTS, DEFAULT_TYPES, makeChannels } from "$config/defaults";
+
+export const TYPES = DEFAULT_TYPES;
 
 export const CONFIG = {
-  HTTP: {
-    ENABLED: true,
-    PORT: 3002, // port to listen on
-  },
-  VK: {
-    group_id: 0,
-    test_response: '',
-    secret_key: '',
-  },
-  POSTS: {
-    largest_image: 1280,
-    thumb_size: 130,
-    max_thumbs: 3,
-    char_limit_text: 1000,
-    char_limit_image: 600,
-    attach_images: true,
-  },
-  TELEGRAM: {
-    key: '', // take it from BotFather
-    channels: [
-      // {
-      //   chat: '@chan_id', // can be @chan_id ir -123456789 for private chans
-      //   events: [TYPES.NEW_POST, TYPES.GROUP_JOIN],
-      // },
-    ]
-  },
-  PROXY: '', // socks proxy, can be empty
-  DB: { // will be used to store likes data
-    NEEDS_AUTH: false,
-    USER: '',
-    PASSWORD: '',
-    HOSTNAME: 'localhost',
-    PORT: 27017,
-    DATABASE: 'tg-bot',
-  },
+  ...DEFAULTS, // override default settings here
 };
 
-export const CHANNELS = CONFIG.TELEGRAM && CONFIG.TELEGRAM.channels && CONFIG.TELEGRAM.channels.reduce((obj, chan) => ({
-  ...obj,
-  ...chan.events.reduce((obj2, event) => ({
-    ...obj2,
-    [event]: [ ...(obj[event] || []), chan.chat ]
-  }), {})
-}), { });
+export const CHANNELS = (CONFIG.TELEGRAM && CONFIG.TELEGRAM.channels && makeChannels(CONFIG.TELEGRAM.channels)) || {};
 
-console.log({ CHANNELS });
+console.log("LISTENING TO CHANNELS:\n", CHANNELS);
+
+

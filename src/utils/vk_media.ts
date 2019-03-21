@@ -45,4 +45,8 @@ export const getMapUrl = (text: string): string => {
   return (match && match[0]) || '';
 };
 
+export const makeDialogUrl = (group_id: number, user_id: number): string => (
+  `https://vk.com/gim${group_id}?sel=${user_id}`
+);
+
 export const cutText = (text: string, limit: number): string => `${text.substr(0, limit)}${text.length > limit ? '...' : ''}`;

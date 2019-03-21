@@ -5,6 +5,7 @@ import { TYPES } from "$config/server";
 import * as express from 'express';
 import { groupJoinResponder } from "./responsers/groupJoinResponder";
 import { postSuggestionResponser } from "./responsers/postSuggestionResponser";
+import { messageNewResponser } from "./responsers/messageNewResponser";
 
 // export const TYPES = {
 //   CONFIRMATION: 'confirmation',
@@ -21,6 +22,7 @@ export const RESPONSERS: IResponsers = {
   [TYPES.GROUP_JOIN]: groupJoinResponder,
   [TYPES.GROUP_LEAVE]: groupJoinResponder,
   [TYPES.POST_SUGGESTION]: postSuggestionResponser,
+  [TYPES.MESSAGE_NEW]: messageNewResponser,
   DEFAULT: defaultResponser,
 };
 

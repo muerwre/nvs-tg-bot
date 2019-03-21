@@ -114,7 +114,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
     disable_web_page_preview: true,
   };
 
-  console.log('sending', { link });
+  console.log('sending', { link, object });
 
   const message = is_image_post
     ?

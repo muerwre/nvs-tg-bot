@@ -61,6 +61,7 @@ export interface INewPostObject {
     id: number,
     from_id: number,
     owner_id: number,
+    signer_id: number,
     date: number,
     marked_as_ads: number,
     post_type: string,

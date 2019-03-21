@@ -16,6 +16,7 @@ export const DEFAULTS = {
     group_id: 0,
     test_response: '',
     secret_key: '',
+    api_key: '',
   },
   POSTS: {
     largest_image: 1280,
@@ -24,7 +25,7 @@ export const DEFAULTS = {
     char_limit_text: 1000,
     char_limit_image: 600,
     attach_images: true,
-    new_message_delay: 60 * 1000, // time from latest message sent (one hour)
+    new_message_delay: 60 * 60 * 1000, // time from latest message sent (one hour)
     new_message_char_limit: 200,
   },
   TELEGRAM: {

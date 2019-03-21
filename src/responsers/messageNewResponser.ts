@@ -4,6 +4,7 @@ import * as express from 'express';
 import { cutText, makeDialogUrl, makePostUrl, parseAttachments } from "../utils/vk_media";
 import { INewPostObject } from "./newPostResponser";
 import { Message } from "../models/Message";
+import { getUserName } from "../utils/vk_api";
 
 interface IMessageNewObject {
   type: string,
@@ -42,10 +43,16 @@ export const messageNewResponser = async (req: express.Request, res: express.Res
     await Message.create({ group_id, user_id, chat, timestamp });
   }
 
+  const name = await getUserName(user_id);
+  const link = name
+    ? `<a href="https://vk.com/id${user_id}">${name}</a>`
+    : `<a href="https://vk.com/id${user_id}">https://vk.com/id${user_id}</a>`;
+
+  console.log({ link, chat });
   const { body } = object;
   await bot.telegram.sendMessage(
     chat,
-    cutText(`<b>Новое сообщение:</b> ${body}`, CONFIG.POSTS.new_message_char_limit),
+    cutText(`(Сообщение) ${link}: ${body}`, CONFIG.POSTS.new_message_char_limit),
     {
       reply_markup: {
         inline_keyboard: [[

@@ -17,7 +17,7 @@ export const groupJoinResponder = async (req: express.Request, res: express.Resp
 
   const count = await getMembersCount();
 
-  const members = (count && ` _${count}_`) || ' ';
+  const members = (count && ` _#${count}_`) || ' ';
   const status = type === 'group_join' ? 'присоединился к группе 😃' : 'cвалил из группы 😡';
   // [inline URL](http://www.example.com/)
   const link = name

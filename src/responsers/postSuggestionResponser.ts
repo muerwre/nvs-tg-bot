@@ -22,8 +22,8 @@ export const postSuggestionResponser = async (req: express.Request, res: express
 
   const name = await getUserName(from_id);
   const link = name
-    ? `<a href="https://vk.com/id${from_id}">${name}</a>`
-    : `<a href="https://vk.com/id${from_id}">https://vk.com/id${from_id}</a>`;
+    ? `[${name}](https://vk.com/id${from_id})`
+    : `[https://vk.com/id${from_id}](https://vk.com/id${from_id})`;
 
   await bot.telegram.sendMessage(
     chat,
@@ -34,7 +34,7 @@ export const postSuggestionResponser = async (req: express.Request, res: express
           { text: 'Посмотреть пост', url: makePostUrl(group_id, object.id) }
         ]],
       },
-      parse_mode: 'Html',
+      parse_mode: 'Markdown',
       disable_web_page_preview: true,
     },
   ).catch(() => false);

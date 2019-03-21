@@ -5,6 +5,7 @@ import { makeKB } from "../utils/merkup";
 import { EMOTIONS, OK_RESPONSE } from "../const";
 import { cutText, getAttachmentLinks, getMapUrl, makePostUrl, parseAttachments } from "../utils/vk_media";
 import { Post } from "../models/Post";
+import { getUserName } from "../utils/vk_api";
 
 export interface IAttachment {
   type: string,
@@ -80,7 +81,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   if (!chat) return;
 
   const { object, group_id } = req.body as INewPostObject;
-  const { text, attachments } = object;
+  const { text, attachments, from_id } = object;
 
   const images = attachments && parseAttachments(attachments).slice(0, CONFIG.POSTS.max_thumbs);
   const topics = attachments && getAttachmentLinks(attachments).slice(0, 1);
@@ -93,6 +94,9 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const text_limit = is_image_post ? CONFIG.POSTS.char_limit_image : CONFIG.POSTS.char_limit_text;
   const is_cutted = (text.length > text_limit);
   const topic_url = (topics && topics[0] && topics[0].url) || null;
+
+  const name = await getUserName(from_id);
+  const link = (name && `\n- [${name}](https://vk.com/id${from_id})\n`) || `\n`;
 
   const extras = {
     reply_markup: {
@@ -116,7 +120,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
         chat,
         images[0].media,
         {
-          caption: cutText(text, text_limit),
+          caption: cutText(text, text_limit).link,
           parse_mode: 'Markdown',
           disable_web_page_preview: true,
           ...extras,
@@ -125,7 +129,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
     :
       await bot.telegram.sendMessage(
         chat,
-        cutText(text, text_limit),
+        cutText(text, text_limit).link,
         extras,
       ).catch(() => false);
 

@@ -19,12 +19,13 @@ export const groupJoinResponder = async (req: express.Request, res: express.Resp
 
   const members = (count && ` [${count}]`) || ' ';
   const status = type === 'group_join' ? 'присоединился к группе 😃' : 'cвалил из группы 😡';
+  // [inline URL](http://www.example.com/)
   const link = name
-    ? `<a href="https://vk.com/id${user_id}">${name}</a>`
-    : `<a href="https://vk.com/id${user_id}">https://vk.com/id${user_id}</a>`;
+    ? `[${name}](https://vk.com/id${user_id})`
+    : `[https://vk.com/id${user_id}](https://vk.com/id${user_id})`;
   const text = `(Участники)${members} ${link} ${status}`;
 
-  const extras = { parse_mode: 'Html', disable_web_page_preview: true };
+  const extras = { parse_mode: 'Markdown', disable_web_page_preview: true };
 
   await bot.telegram.sendMessage(chat, text, extras).catch(() => null);
 

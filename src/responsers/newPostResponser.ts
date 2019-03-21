@@ -120,7 +120,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
         chat,
         images[0].media,
         {
-          caption: cutText(text, text_limit).link,
+          caption: `${cutText(text, text_limit)}${link}`,
           parse_mode: 'Markdown',
           disable_web_page_preview: true,
           ...extras,
@@ -129,7 +129,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
     :
       await bot.telegram.sendMessage(
         chat,
-        cutText(text, text_limit).link,
+        `${cutText(text, text_limit)}${link}`,
         extras,
       ).catch(() => false);
 

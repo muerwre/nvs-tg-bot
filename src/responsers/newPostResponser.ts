@@ -81,7 +81,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   if (!chat) return;
 
   const { object, group_id } = req.body as INewPostObject;
-  const { text, attachments, from_id } = object;
+  const { text, attachments, signer_id } = object;
 
   const images = attachments && parseAttachments(attachments).slice(0, CONFIG.POSTS.max_thumbs);
   const topics = attachments && getAttachmentLinks(attachments).slice(0, 1);
@@ -95,8 +95,8 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const is_cutted = (text.length > text_limit);
   const topic_url = (topics && topics[0] && topics[0].url) || null;
 
-  const name = await getUserName(from_id);
-  const link = (name && `\n- [${name}](https://vk.com/id${from_id})\n`) || `\n`;
+  const name = await getUserName(signer_id);
+  const link = (name && `\n- [${name}](https://vk.com/id${signer_id})\n`) || `\n`;
 
   const extras = {
     reply_markup: {

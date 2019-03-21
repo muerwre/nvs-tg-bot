@@ -45,3 +45,20 @@ export const getMembersCount = async (): Promise<number> => {
 
   return count;
 };
+
+export const setOnlineStatus = async (): Promise<void> => {
+  if (!CONFIG.VK.api_key) return;
+
+  return await axios.get(
+    `https://api.vk.com/method/groups.enableOnline`,
+    {
+      params: {
+        group_id: CONFIG.VK.group_id,
+        access_token: CONFIG.VK.api_key,
+        v: '5.92',
+      }
+    }
+  )
+    .then(() => {})
+    .catch(() => {});
+};

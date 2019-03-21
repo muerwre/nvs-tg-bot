@@ -4,7 +4,7 @@ import * as express from 'express';
 import { cutText, makeDialogUrl, makePostUrl, parseAttachments } from "../utils/vk_media";
 import { INewPostObject } from "./newPostResponser";
 import { Message } from "../models/Message";
-import { getUserName } from "../utils/vk_api";
+import { getUserName, setOnlineStatus } from "../utils/vk_api";
 
 interface IMessageNewObject {
   type: string,
@@ -48,7 +48,6 @@ export const messageNewResponser = async (req: express.Request, res: express.Res
     ? `<a href="https://vk.com/id${user_id}">${name}</a>`
     : `<a href="https://vk.com/id${user_id}">https://vk.com/id${user_id}</a>`;
 
-  console.log({ link, chat });
   const { body } = object;
   await bot.telegram.sendMessage(
     chat,
@@ -63,6 +62,8 @@ export const messageNewResponser = async (req: express.Request, res: express.Res
       disable_web_page_preview: true,
     },
   ).catch(() => false);
+
+  await setOnlineStatus();
 
   return true;
 };

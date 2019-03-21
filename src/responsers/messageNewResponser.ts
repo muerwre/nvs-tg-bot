@@ -1,8 +1,7 @@
 import { CONFIG } from "$config/server";
 import bot from '../bot';
 import * as express from 'express';
-import { cutText, makeDialogUrl, makePostUrl, parseAttachments } from "../utils/vk_media";
-import { INewPostObject } from "./newPostResponser";
+import { cutText, makeDialogUrl } from "../utils/vk_media";
 import { Message } from "../models/Message";
 import { getUserName, setOnlineStatus } from "../utils/vk_api";
 

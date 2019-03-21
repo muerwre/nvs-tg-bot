@@ -40,7 +40,7 @@ export const makePostUrl = (group_id: number, post_id: number): string => GROUPS
   : `https://vk.com/wall-${group_id}_${post_id}`;
 
 export const getMapUrl = (text: string): string => {
-  const match = text && text.match(/(http|https):\/\/(map|alpha-map)\.vault48\.org\/[A-Za-z\_]+/);
+  const match = text && text.match(/(http|https):\/\/(map|alpha-map)\.vault48\.org\/[0-9A-Za-z\_]+/);
 
   return (match && match[0]) || '';
 };

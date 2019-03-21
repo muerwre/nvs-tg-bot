@@ -114,6 +114,8 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
     disable_web_page_preview: true,
   };
 
+  console.log('sending');
+
   const message = is_image_post
     ?
       await bot.telegram.sendPhoto(

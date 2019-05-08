@@ -4,7 +4,7 @@
   "description": "Telegram bot for group reposting",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node ./dist/bin/server",
+    "start": "npm i && node ./dist/bin/server",
     "build": "rm -rf ./dist && tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "prepare": "npm run build",
     "dev": "nodemon",

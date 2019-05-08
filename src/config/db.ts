@@ -16,7 +16,7 @@ const url = CONFIG.DB.NEEDS_AUTH
   : `mongodb://${HOSTNAME}:${PORT}/${DATABASE}`;
 
 mongoose.connect(url);
-mongoose.set('debug', true);
+// mongoose.set('debug', true);
 // mongoose.createConnection(PORT, HOSTNAME, { user: USER, pass: PASSWORD, auth: { authdb: 'admin' } });
 const database = mongoose.connection;
 

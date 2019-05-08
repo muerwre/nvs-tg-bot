@@ -136,13 +136,23 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
           disable_web_page_preview: true,
           ...extras,
         }
-      ).catch(console.log)
+      )
+        .then(() => console.log(`[POST] ${object.id} sent with image`))
+        .catch(error => {
+          console.log(`[POST] ${object.id} catched error`);
+          console.log(error);
+        })
     :
       await bot.telegram.sendMessage(
         chat,
         `${cutText(parsed, text_limit)}${link}`,
         extras,
-      ).catch(() => false);
+      )
+        .then(() => console.log(`[POST] ${object.id} sent as plain text`))
+        .catch(error => {
+          console.log(`[POST] ${object.id} catched error`);
+          console.log(error);
+        });
 
   if (message) {
     await Post.create({

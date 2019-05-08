@@ -23,7 +23,7 @@ export const DEFAULTS = {
     thumb_size: 130,
     max_thumbs: 3,
     char_limit_text: 1000,
-    char_limit_image: 1000,
+    char_limit_image: 960,
     attach_images: true,
     new_message_delay: 60 * 60 * 1000, // time from latest message sent (one hour)
     new_message_char_limit: 200,

@@ -3,7 +3,7 @@ import bot from '../bot';
 import * as express from 'express';
 import { makeKB } from "../utils/merkup";
 import { EMOTIONS, OK_RESPONSE } from "../const";
-import { cutText, getAttachmentLinks, getMapUrl, makePostUrl, parseAttachments } from "../utils/vk_media";
+import { cutText, getAttachmentLinks, getMapUrl, makePostUrl, parseAttachments, parseText } from "../utils/vk_media";
 import { Post } from "../models/Post";
 import { getUserName } from "../utils/vk_api";
 
@@ -84,6 +84,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const { object, group_id } = req.body as INewPostObject;
   const { text, attachments, signer_id } = object;
 
+  const parsed = parseText(text);
   const images = attachments && parseAttachments(attachments).slice(0, CONFIG.POSTS.max_thumbs);
   const topics = attachments && getAttachmentLinks(attachments).slice(0, 1);
   const is_image_post = CONFIG.POSTS.attach_images && images && images.length > 0;
@@ -93,11 +94,11 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   if (exist) return;
 
   const text_limit = is_image_post ? CONFIG.POSTS.char_limit_image : CONFIG.POSTS.char_limit_text;
-  const is_cutted = (text.length > text_limit);
+  const is_cutted = (parsed.length > text_limit);
   const topic_url = (topics && topics[0] && topics[0].url) || null;
 
   const name = signer_id && signer_id > 0 && await getUserName(signer_id);
-  const link = (name && `\n\n- [${name}](https://vk.com/id${signer_id})\n`) || `\n`;
+  const link = (name && `\n\n- <a href="https://vk.com/id${signer_id}">${name}</a>\n`) || `\n`;
 
   const extras = {
     reply_markup: {
@@ -111,7 +112,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
         }
       ),
     },
-    parse_mode: 'Markdown',
+    parse_mode: 'HTML',
     disable_web_page_preview: true,
   };
 
@@ -121,8 +122,8 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
         chat,
         images[0].media,
         {
-          caption: `${cutText(text, text_limit)}${link}`,
-          parse_mode: 'Markdown',
+          caption: `${cutText(parsed, text_limit)}${link}`,
+          parse_mode: 'HTML',
           disable_web_page_preview: true,
           ...extras,
         }
@@ -130,7 +131,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
     :
       await bot.telegram.sendMessage(
         chat,
-        `${cutText(text, text_limit)}${link}`,
+        `${cutText(parsed, text_limit)}${link}`,
         extras,
       ).catch(() => false);
 

@@ -12,6 +12,7 @@ export const PostSchema = new Schema(
     is_cutted: { type: Boolean, default: false },
     map_url: { type: String, required: false },
     post_url: { type: String, required: true },
+    album_url: { type: String, required: true },
     topic_url: { type: String, required: false },
   },
   {

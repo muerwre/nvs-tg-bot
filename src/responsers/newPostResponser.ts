@@ -3,7 +3,15 @@ import bot from '../bot';
 import * as express from 'express';
 import { makeKB } from "../utils/merkup";
 import { EMOTIONS, OK_RESPONSE } from "../const";
-import { cutText, getAttachmentLinks, getMapUrl, makePostUrl, parseAttachments, parseText } from "../utils/vk_media";
+import {
+  cutText,
+  getAlbumUrl,
+  getAttachmentLinks,
+  getMapUrl,
+  makePostUrl,
+  parseAttachments,
+  parseText
+} from "../utils/vk_media";
 import { Post } from "../models/Post";
 import { getUserName } from "../utils/vk_api";
 
@@ -107,6 +115,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
         {
           post_url: makePostUrl(group_id, object.id),
           map_url: getMapUrl(text),
+          album_url: getAlbumUrl(text),
           topic_url,
           is_cutted,
         }
@@ -145,6 +154,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
       is_cutted,
       post_url: makePostUrl(group_id, object.id),
       map_url: getMapUrl(text),
+      album_url: getAlbumUrl(text),
       topic_url,
     });
 
@@ -152,30 +162,4 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   } else {
     return;
   }
-
-  // const textSent = await bot.telegram.sendPhoto(
-  //   CONFIG.TELEGRAM.chat,
-  //   images[0].media,
-  //   {
-  //     caption: text.substr(0, CONFIG.POSTS.char_limit),
-  //   }
-  // );
-
-
-  // if (images) {
-  //   await bot.telegram.sendMediaGroup(CONFIG.TELEGRAM.chat, images, { disable_notification: true })
-  //     .then(() => true)
-  //     .catch(() => false);
-  // }
-
-  // if (images) {
-  //   bot.telegram.sendMessage(CONFIG.TELEGRAM.chat, '*_*', {
-  //     ...extras,
-  //     disable_notification: true,
-  //     parse_mode: 'Markdown',
-  //     disable_web_page_preview: true,
-  //   })
-  //     .then(() => true)
-  //     .catch(() => false);
-  // }
 };

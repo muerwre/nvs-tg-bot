@@ -45,10 +45,15 @@ export const getMapUrl = (text: string): string => {
   return (match && match[0]) || '';
 };
 
+export const getAlbumUrl = (text: string): string => {
+  const match = text && text.match(/(http|https):\/\/vk\.com\/album-\d+_\d+\/?/);
+
+  return (match && match[0]) || '';
+};
+
 export const makeDialogUrl = (group_id: number, user_id: number): string => (
   `https://vk.com/gim${group_id}?sel=${user_id}`
 );
 
 export const cutText = (text: string, limit: number): string => `${text.substr(0, limit)}${text.length > limit ? '...' : ''}`;
-export const parseText = (text: string) => text.replace(/</, '&gt;').replace(/>/, '&;lt;');
-// (<(?![a|/a]))
+export const parseText = (text: string) => text.replace(/</ig, '&gt;').replace(/>/ig, '&;lt;');

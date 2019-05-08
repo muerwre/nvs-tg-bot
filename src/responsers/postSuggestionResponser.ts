@@ -1,7 +1,6 @@
 import { CONFIG } from "$config/server";
 import bot from '../bot';
 import * as express from 'express';
-import { makeKB } from "../utils/merkup";
 import { cutText,  makePostUrl, parseAttachments } from "../utils/vk_media";
 import { INewPostObject } from "./newPostResponser";
 import { getUserName } from "../utils/vk_api";
@@ -9,7 +8,6 @@ import { getUserName } from "../utils/vk_api";
 
 
 export const postSuggestionResponser = async (req: express.Request, res: express.Response, chat?: string): Promise<boolean> => {
-  console.log('suggestiuon data to', { chat });
   if (!chat) return;
 
   const { object, group_id } = req.body as INewPostObject;

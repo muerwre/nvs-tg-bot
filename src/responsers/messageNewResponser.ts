@@ -22,7 +22,6 @@ interface IMessageNewObject {
 }
 
 export const messageNewResponser = async (req: express.Request, res: express.Response, chat?: string): Promise<boolean> => {
-  console.log('chat?', chat);
   if (!chat) return;
 
   const { object, group_id } = req.body as IMessageNewObject;

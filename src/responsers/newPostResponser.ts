@@ -126,7 +126,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
           disable_web_page_preview: true,
           ...extras,
         }
-      ).catch(() => null)
+      ).catch(console.log)
     :
       await bot.telegram.sendMessage(
         chat,
@@ -151,7 +151,6 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   } else {
     return;
   }
-
 
   // const textSent = await bot.telegram.sendPhoto(
   //   CONFIG.TELEGRAM.chat,

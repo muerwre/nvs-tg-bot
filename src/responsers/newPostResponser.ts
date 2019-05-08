@@ -99,14 +99,17 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
 
   const exist = await Post.findOne({ chat, group_id: group_id, post_id: object.id });
 
-  if (exist) return;
+  if (exist) {
+    console.log(`[POST] ${object.id} already in db`);
+    return;
+  }
 
   const text_limit = is_image_post ? CONFIG.POSTS.char_limit_image : CONFIG.POSTS.char_limit_text;
   const is_cutted = (parsed.length > text_limit);
   const topic_url = (topics && topics[0] && topics[0].url) || null;
 
   const name = signer_id && signer_id > 0 && await getUserName(signer_id);
-  const link = (name && `\n\n- <a href="https://vk.com/id${signer_id}">${name}</a>\n`) || `\n`;
+  const link = (name && `\n\n-<a href="https://vk.com/id${signer_id}">${name}</a>\n`) || `\n`;
 
   const extras = {
     reply_markup: {
@@ -136,9 +139,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
           disable_web_page_preview: true,
           ...extras,
         }
-      )
-        .then(() => console.log(`[POST] ${object.id} sent with image`))
-        .catch(error => {
+      ).catch(error => {
           console.log(`[POST] ${object.id} catched error`);
           console.log(error);
         })
@@ -147,14 +148,14 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
         chat,
         `${cutText(parsed, text_limit)}${link}`,
         extras,
-      )
-        .then(() => console.log(`[POST] ${object.id} sent as plain text`))
-        .catch(error => {
+      ).catch(error => {
           console.log(`[POST] ${object.id} catched error`);
           console.log(error);
         });
 
   if (message) {
+    console.log(`[POST] ${object.id} sent as ${is_image_post ? 'image' : 'plain text'}`);
+
     await Post.create({
       chat: `@${message.chat.username}`,
       chat_id: message.chat.id,

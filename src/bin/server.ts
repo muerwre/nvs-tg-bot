@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import { CONFIG } from '../config/server';
+import { CONFIG } from '$config/server';
 
-const index = require('../src/index');
+const index = require('../index');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');

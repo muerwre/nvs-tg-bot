@@ -11,7 +11,7 @@
     "lib": [ "es2015", "DOM", "es6" ],
     "baseUrl": ".",
     "paths": {
-      "$config/*": [ "./config/*" ]
+      "$config/*": [ "./src/config/*" ]
     }
   },
   "include": [

@@ -16,9 +16,16 @@ const options = {
 
 const bot = new Telegraf(CONFIG.TELEGRAM.key, options);
 
+bot.command('ping', async (ctx, next) => {
+  // console.log("GOT IT!", ctx.message.chat.id);
+  // return await ctx.replyWithAnimation('https://media.giphy.com/media/LrmU6jXIjwziE/giphy.gif');
+  return await ctx.reply(`pong`)
+});
+
 bot.on('message', async (ctx, next) => {
   // console.log("GOT IT!", ctx.message.chat.id);
   // return await ctx.replyWithAnimation('https://media.giphy.com/media/LrmU6jXIjwziE/giphy.gif');
+  // return await ctx.reply(`I'm here :-)`)
 });
 
 bot.action(/emo \[(\d+)\]/, async (ctx) => {

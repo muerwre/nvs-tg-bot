@@ -17,8 +17,6 @@ const options = {
 const bot = new Telegraf(CONFIG.TELEGRAM.key, options);
 
 bot.command('ping', async (ctx, next) => {
-  // console.log("GOT IT!", ctx.message.chat.id);
-  // return await ctx.replyWithAnimation('https://media.giphy.com/media/LrmU6jXIjwziE/giphy.gif');
   return await ctx.reply(`pong`)
 });
 
@@ -40,7 +38,6 @@ bot.action(/emo \[(\d+)\]/, async (ctx) => {
   const chat_id = message.chat.id;
 
   const vote = await Vote.findOne({ user_id, message_id, chat_id });
-  console.log({ vote });
 
   if (vote) {
     await vote.set({ emo_id }).save();

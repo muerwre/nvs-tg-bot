@@ -109,7 +109,7 @@ export const newPostResponser = async (req: express.Request, res: express.Respon
   const topic_url = (topics && topics[0] && topics[0].url) || null;
 
   const name = signer_id && signer_id > 0 && await getUserName(signer_id);
-  const link = (name && `\n\n-<a href="https://vk.com/id${signer_id}">${name}</a>\n`) || `\n`;
+  const link = (name && `\n\n- <a href="https://vk.com/id${signer_id}">${name}</a>\n`) || `\n`;
 
   const extras = {
     reply_markup: {

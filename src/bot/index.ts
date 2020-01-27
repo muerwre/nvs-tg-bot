@@ -16,6 +16,12 @@ const options = {
 
 const bot = new Telegraf(CONFIG.TELEGRAM.key, options);
 
+bot.command('pidor', async (ctx, next) => {
+  await ctx.reply(`А вот и нет, у меня МТБ`, { 'reply_to_message_id': ctx.message.message_id })
+  next();
+  return;
+});
+
 bot.command('ping', async (ctx, next) => {
   return await ctx.reply(`pong`)
 });

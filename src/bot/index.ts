@@ -20,7 +20,7 @@ bot.command('ping', async (ctx, next) => {
   return await ctx.reply(`pong`)
 });
 
-bot.hears(/снег/igm, async (ctx, next) => {
+bot.hears(/снег|sneg|сугроб|метель|зима/igm, async (ctx, next) => {
   console.log("MESSAGE!", { msg: ctx.message.from });
 
   if (ctx.message.from.username !== 'diskoteka_iznutri' && ctx.message.from.username !== 'vv4000') {

@@ -20,10 +20,15 @@ bot.command('ping', async (ctx, next) => {
   return await ctx.reply(`pong`)
 });
 
-bot.on('message', async (ctx, next) => {
-  // console.log("GOT IT!", ctx.message.chat.id);
-  // return await ctx.replyWithAnimation('https://media.giphy.com/media/LrmU6jXIjwziE/giphy.gif');
-  // return await ctx.reply(`I'm here :-)`)
+bot.hears(/снег/igm, async (ctx, next) => {
+  if (ctx.message.from.username !== '@diskoteka_iznutri' && ctx.message.from.username !== '@vv4000') {
+    next();
+    return;
+  }
+
+  await ctx.reply(`Липа, кончай ныть!`)
+  next();
+  return;
 });
 
 bot.action(/emo \[(\d+)\]/, async (ctx) => {

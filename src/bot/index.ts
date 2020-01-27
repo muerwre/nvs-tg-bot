@@ -28,7 +28,8 @@ bot.hears(/снег/igm, async (ctx, next) => {
     return;
   }
 
-  await ctx.reply(`Липа, кончай ныть!`)
+  await ctx.reply(`Коля, кончай ныть!`, { 'reply_to_message_id': ctx.message.message_id })
+
   next();
   return;
 });

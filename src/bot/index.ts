@@ -21,7 +21,9 @@ bot.command('ping', async (ctx, next) => {
 });
 
 bot.hears(/снег/igm, async (ctx, next) => {
-  if (ctx.message.from.username !== '@diskoteka_iznutri' && ctx.message.from.username !== '@vv4000') {
+  console.log("MESSAGE!", { msg: ctx.message.from });
+
+  if (ctx.message.from.username !== 'diskoteka_iznutri' && ctx.message.from.username !== 'vv4000') {
     next();
     return;
   }

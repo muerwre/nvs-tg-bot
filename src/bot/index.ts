@@ -16,29 +16,24 @@ const options = {
 
 const bot = new Telegraf(CONFIG.TELEGRAM.key, options);
 
-bot.command('pidor', async (ctx, next) => {
-  await ctx.reply(`А вот и нет, у меня МТБ`, { 'reply_to_message_id': ctx.message.message_id })
-  next();
-  return;
-});
-
 bot.command('ping', async (ctx, next) => {
   return await ctx.reply(`pong`)
 });
 
-bot.hears(/снег|sneg|сугроб|метель|зима/igm, async (ctx, next) => {
-  console.log("MESSAGE!", { msg: ctx.message.from });
-
-  if (ctx.message.from.username !== 'diskoteka_iznutri') {
-    next();
-    return;
-  }
-
-  await ctx.reply(`Коля, кончай ныть!`, { 'reply_to_message_id': ctx.message.message_id })
-
-  next();
-  return;
-});
+if (CONFIG.REACTIONS && CONFIG.REACTIONS.length) {
+  CONFIG.REACTIONS.map(({ match, from, reply }) => {
+    if (!reply || !match) return;
+    
+    bot.hears(match, async (ctx, next) => {    
+      if (!!from && from !== ctx.message.from.username) {
+        return next();
+      }
+      
+      await ctx.reply(reply, { 'reply_to_message_id': ctx.message.message_id })
+      return next();
+    });
+  });
+}
 
 bot.action(/emo \[(\d+)\]/, async (ctx) => {
   const { message = {}, from = {} } = ctx && ctx.update && ctx.update.callback_query || { };

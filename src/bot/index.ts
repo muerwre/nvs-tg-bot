@@ -49,10 +49,12 @@ if (
   CONFIG.RANDOM_MEDIA.phrase &&
   CONFIG.RANDOM_MEDIA.folder
 ) {
-  bot.hears(CONFIG.RANDOM_MEDIA.phrase, throttle(60000, async (ctx, next) => {
+  bot.hears(CONFIG.RANDOM_MEDIA.phrase, throttle(10000, async (ctx, next) => {
     const output = execSync(`find "${CONFIG.RANDOM_MEDIA.folder}" -type f -name "*.mp3" | shuf -n 1`, {
       encoding: "utf-8"
     });
+
+    console.log('sending meat', output);
 
     try {
       await ctx.replyWithAudio({ source: `${output}`.replace("\n", "") }, { reply_to_message_id: ctx.message.message_id });

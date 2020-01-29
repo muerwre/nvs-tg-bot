@@ -55,7 +55,7 @@ if (
     });
 
     try {
-      await ctx.replyWithAudio({ source: `${output}`.replace("\n", "") });
+      await ctx.replyWithAudio({ source: `${output}`.replace("\n", "") }, { reply_to_message_id: ctx.message.message_id });
     } catch(e) {
       console.log('Cant send audio :-(', e)
     }

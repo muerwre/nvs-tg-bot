@@ -4,6 +4,8 @@ import { EMOTIONS } from "../const";
 import { Vote } from "../models/Vote";
 import { Post } from "../models/Post";
 import { throttle } from "throttle-debounce";
+import { execSync } from "child_process";
+import { readFileSync } from 'fs';
 
 const SocksProxyAgent = require("socks-proxy-agent");
 const Telegraf = require("telegraf");
@@ -39,6 +41,26 @@ if (CONFIG.REACTIONS && CONFIG.REACTIONS.length) {
         return next();
       })
     );
+  });
+}
+
+if (
+  CONFIG.RANDOM_MEDIA &&
+  CONFIG.RANDOM_MEDIA.phrase &&
+  CONFIG.RANDOM_MEDIA.folder
+) {
+  bot.hears(CONFIG.RANDOM_MEDIA.phrase, async (ctx, next) => {
+    const output = execSync(`find "${CONFIG.RANDOM_MEDIA.folder}" -type f -name "*.mp3" | shuf -n 1`, {
+      encoding: "utf-8"
+    });
+
+    try {
+      await ctx.replyWithAudio({ source: `${output}`.replace("\n", "") });
+    } catch(e) {
+      console.log('Cant send audio :-(', e)
+    }
+
+    return next();
   });
 }
 

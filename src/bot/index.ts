@@ -50,7 +50,7 @@ if (
   CONFIG.RANDOM_MEDIA.folder
 ) {
   bot.hears(CONFIG.RANDOM_MEDIA.phrase, throttle(10000, async (ctx, next) => {
-    const output = execSync(`find "${CONFIG.RANDOM_MEDIA.folder}" -type f -name "*.mp3" | shuf -n 1`, {
+    const output = execSync(`find -L "${CONFIG.RANDOM_MEDIA.folder}" -type f -name "*.mp3" | shuf -n 1`, {
       encoding: "utf-8"
     });
 

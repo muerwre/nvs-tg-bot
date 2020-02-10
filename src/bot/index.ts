@@ -4,7 +4,7 @@ import { makeKB } from "../utils/merkup";
 import { EMOTIONS } from "../const";
 import { Vote } from "../entity/Vote";
 import { Post } from "../entity/Post";
-import { rollResponser } from "src/responsers/rollResponser";
+import { rollResponser } from "../responsers/rollResponser";
 import Axios from "axios";
 
 const SocksProxyAgent = require("socks-proxy-agent");

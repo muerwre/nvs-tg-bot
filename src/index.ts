@@ -1,11 +1,11 @@
 import "reflect-metadata";
-import * as createError from "http-errors";
-import * as express from "express";
-import * as path from "path";
-import * as cookieParser from "cookie-parser";
-import * as lessMiddleware from "less-middleware";
-import * as logger from "morgan";
-import * as bodyParser from "body-parser";
+import createError from "http-errors";
+import express from "express";
+import path from "path";
+import cookieParser from "cookie-parser";
+import lessMiddleware from "less-middleware";
+import logger from "morgan";
+import bodyParser from "body-parser";
 import mainRouter from "./routes/main";
 import { createConnection } from "typeorm";
 import { CONFIG } from "$config/server";
@@ -13,7 +13,7 @@ import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOpti
 
 const app = express();
 
-console.log({ DB: CONFIG.DB });
+console.log(__dirname, { DB: CONFIG.DB });
 
 createConnection({
   type: "mysql",
@@ -23,10 +23,9 @@ createConnection({
   port: CONFIG.DB.PORT || 3606,
   database: CONFIG.DB.DATABASE,
   synchronize: true,
-  entities: ["./src/entity/*.ts"],
+  entities: [`${__dirname}/entity/*`],
   logging: true
 } as MysqlConnectionOptions).then(() => {
-  // view engine setup
   app.set("views", path.join(__dirname, "views"));
   app.set("view engine", "pug");
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import "reflect-metadata";
 import { CONFIG } from '$config/server';
 
 const index = require('../index');

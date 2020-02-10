@@ -40,11 +40,11 @@ export const DEFAULTS = {
   PROXY: "", // socks proxy, can be empty
   DB: {
     // will be used to store likes data
-    NEEDS_AUTH: false,
+    // NEEDS_AUTH: false,
     USER: "",
     PASSWORD: "",
     HOSTNAME: "localhost",
-    PORT: 27017,
+    // PORT: 27017,
     DATABASE: "tg-bot"
   },
   REACTIONS: [

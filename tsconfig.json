@@ -1,6 +1,8 @@
 {
   "allowSyntheticDefaultImports": true,
   "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": false,

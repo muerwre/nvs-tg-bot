@@ -1,11 +1,12 @@
+import "reflect-metadata";
 import { CONFIG } from "$config/server";
 import { makeKB } from "../utils/merkup";
 import { EMOTIONS } from "../const";
-import { Vote } from "../models/Vote";
-import { Post } from "../models/Post";
+import { Vote } from "../entity/Vote";
+import { Post } from "../entity/Post";
 import { throttle } from "throttle-debounce";
 import { execSync } from "child_process";
-import { readFileSync } from 'fs';
+import { readFileSync } from "fs";
 
 const SocksProxyAgent = require("socks-proxy-agent");
 const Telegraf = require("telegraf");
@@ -49,58 +50,70 @@ if (
   CONFIG.RANDOM_MEDIA.phrase &&
   CONFIG.RANDOM_MEDIA.folder
 ) {
-  bot.hears(CONFIG.RANDOM_MEDIA.phrase, throttle(10000, async (ctx, next) => {
-    const output = execSync(`find -L "${CONFIG.RANDOM_MEDIA.folder}" -type f -name "*.mp3" | shuf -n 1`, {
-      encoding: "utf-8"
-    });
+  bot.hears(
+    CONFIG.RANDOM_MEDIA.phrase,
+    throttle(10000, async (ctx, next) => {
+      const output = execSync(
+        `find -L "${CONFIG.RANDOM_MEDIA.folder}" -type f -name "*.mp3" | shuf -n 1`,
+        {
+          encoding: "utf-8"
+        }
+      );
 
-    console.log('sending meat', output);
+      console.log("sending meat", output);
 
-    try {
-      await ctx.replyWithAudio({ source: `${output}`.replace("\n", "") }, { reply_to_message_id: ctx.message.message_id });
-    } catch(e) {
-      console.log('Cant send audio :-(', e)
-    }
+      try {
+        await ctx.replyWithAudio(
+          { source: `${output}`.replace("\n", "") },
+          { reply_to_message_id: ctx.message.message_id }
+        );
+      } catch (e) {
+        console.log("Cant send audio :-(", e);
+      }
 
-    return next();
-  }));
+      return next();
+    })
+  );
 }
 
 bot.action(/emo \[(\d+)\]/, async ctx => {
   const { message = {}, from = {} } =
     (ctx && ctx.update && ctx.update.callback_query) || {};
+
   const { match = [] } = ctx;
   const emo_id = (match[1] && parseInt(match[1])) || 0;
 
   if (!message.message_id || !from.id) return;
 
-  const user_id = from.id;
-  const message_id = message.message_id;
-  const chat_id = message.chat.id;
+  const user_id: number = from.id;
+  const message_id: number = message.message_id;
+  const chat_id: number = message.chat.id;
 
-  const vote = await Vote.findOne({ user_id, message_id, chat_id });
+  const vote = await Vote.findOne({ where: { user_id, message_id, chat_id } });
 
   if (vote) {
-    await vote.set({ emo_id }).save();
+    vote.emo_id = emo_id;
+    await vote.save();
   } else {
-    await Vote.create({ user_id, message_id, emo_id, chat_id });
+    await Vote.create({ user_id, message_id, emo_id, chat_id: chat_id.toString() }).save();
   }
 
   // count all likes from db by type
-  const emos = await Vote.find({ message_id, chat_id }).then(result =>
-    result.reduce(
-      (obj, emo) => ({
-        ...obj,
-        [emo.emo_id]: (obj[emo.emo_id] || 0) + 1
-      }),
-      {}
-    )
+  const emos = await Vote.find({ where: { message_id, chat_id: chat_id.toString() } }).then(
+    result =>
+      result.reduce(
+        (obj, emo) => ({
+          ...obj,
+          [emo.emo_id]: (obj[emo.emo_id] || 0) + 1
+        }),
+        {}
+      )
   );
 
   // create like array filled with likes from db
   const list = Object.keys(EMOTIONS).map((em, i) => emos[i] || 0);
 
-  const post = await Post.findOne({ chat_id, message_id });
+  const post = await Post.findOne({ where: { chat_id: chat_id.toString(), message_id }});
   const {
     map_url = null,
     post_url = null,

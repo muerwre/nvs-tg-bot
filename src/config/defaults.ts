@@ -47,13 +47,12 @@ export const DEFAULTS = {
     // PORT: 27017,
     DATABASE: "tg-bot"
   },
-  REACTIONS: [
-    // {
-    // match: /snow|winter/igm,
-    // from: 'diskoteka_iznutri',
-    // reply: 'Kolya, stop complaining!'
-    // }
-  ]
+  FEATURES: {
+    RANDOM_URL: {
+      PROVIDER: "https://map.vault48.org:3000/api/route/random",
+      HOST: "https://map.vault48.org/"
+    }
+  }
 };
 
 export const makeChannels = channels =>

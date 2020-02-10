@@ -4,9 +4,7 @@ import { makeKB } from "../utils/merkup";
 import { EMOTIONS } from "../const";
 import { Vote } from "../entity/Vote";
 import { Post } from "../entity/Post";
-import { throttle } from "throttle-debounce";
-import { execSync } from "child_process";
-import { readFileSync } from "fs";
+import axios from 'axios';
 
 const SocksProxyAgent = require("socks-proxy-agent");
 const Telegraf = require("telegraf");
@@ -24,64 +22,15 @@ bot.command("ping", async (ctx, next) => {
   return await ctx.reply(`pong`);
 });
 
-if (CONFIG.REACTIONS && CONFIG.REACTIONS.length) {
-  CONFIG.REACTIONS.map(({ match, from, reply }) => {
-    if (!reply || !match) return;
+bot.command("roll", async (ctx, next) => {
+  const reply = await axios.get(CONFIG.FEATURES.RANDOM_URL.PROVIDER)
 
-    bot.hears(
-      match,
-      throttle(60000, async (ctx, next) => {
-        const diff = +new Date()/1000 - ctx.message.date;
+  if (!reply || !reply.data || !reply.data.url) {
+    return next();
+  }
 
-        if (
-          ctx.message.from.is_bot ||
-          (!!from && from !== ctx.message.from.username) ||
-          diff > 120
-        ) {
-          return next();
-        }
-
-        await ctx.reply(reply, { reply_to_message_id: ctx.message.message_id });
-        return next();
-      })
-    );
-  });
-}
-
-if (
-  CONFIG.RANDOM_MEDIA &&
-  CONFIG.RANDOM_MEDIA.phrase &&
-  CONFIG.RANDOM_MEDIA.folder
-) {
-  bot.hears(
-    CONFIG.RANDOM_MEDIA.phrase,
-    throttle(10000, async (ctx, next) => {
-      const output = execSync(
-        `find -L "${CONFIG.RANDOM_MEDIA.folder}" -type f -name "*.mp3" | shuf -n 1`,
-        {
-          encoding: "utf-8"
-        }
-      );
-
-      const diff = +new Date()/1000 - ctx.message.date;
-
-      if (diff > 120) return next();
-
-      console.log("sending meat", output);
-
-      try {
-        await ctx.replyWithAudio(
-          { source: `${output}`.replace("\n", "") },
-          { reply_to_message_id: ctx.message.message_id }
-        );
-      } catch (e) {
-        console.log("Cant send audio :-(", e);
-      }
-
-      return next();
-    })
-  );
-}
+  return await ctx.reply(`${CONFIG.FEATURES.RANDOM_URL.HOST}${reply.data.url}`);
+});
 
 bot.action(/emo \[(\d+)\]/, async ctx => {
   const { message = {}, from = {} } =

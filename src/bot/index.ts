@@ -31,9 +31,12 @@ if (CONFIG.REACTIONS && CONFIG.REACTIONS.length) {
     bot.hears(
       match,
       throttle(60000, async (ctx, next) => {
+        const diff = +new Date()/1000 - ctx.message.date;
+
         if (
           ctx.message.from.is_bot ||
-          (!!from && from !== ctx.message.from.username)
+          (!!from && from !== ctx.message.from.username) ||
+          diff > 120
         ) {
           return next();
         }
@@ -59,6 +62,10 @@ if (
           encoding: "utf-8"
         }
       );
+
+      const diff = +new Date()/1000 - ctx.message.date;
+
+      if (diff > 120) return next();
 
       console.log("sending meat", output);
 

@@ -23,9 +23,14 @@ bot.command("ping", async (ctx, next) => {
 });
 
 bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, async (ctx, next) => {
+  const diff = +new Date/1000 - ctx.message.date;
+
+  console.log({ diff });
+
+  if (diff >= 120) return next();
+
   const min = Math.min(ctx.match[1] || 0, ctx.match[2] || 0);
   const max = Math.max(ctx.match[1] || 0, ctx.match[2] || 0);
-
   const reply = await axios
     .get(CONFIG.FEATURES.RANDOM_URL.PROVIDER, { params: { min, max } })
     .catch(() => {});
@@ -37,12 +42,15 @@ bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, async (ctx, next) => {
   const description = reply.data.description
     ? `${reply.data.description}\n`
     : "";
-  return await ctx.reply(
+
+  await ctx.reply(
     `${reply.data.title} (${reply.data.distance}км):\n${description}\n${CONFIG.FEATURES.RANDOM_URL.HOST}${reply.data.id}`,
     {
       disable_web_page_preview: true
     }
   );
+
+  return next();
 });
 
 bot.action(/emo \[(\d+)\]/, async ctx => {

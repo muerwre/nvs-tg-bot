@@ -13,6 +13,8 @@ import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOpti
 
 const app = express();
 
+console.log({ DB: CONFIG.DB });
+
 createConnection({
   type: "mysql",
   username: CONFIG.DB.USER,
@@ -20,10 +22,8 @@ createConnection({
   port: CONFIG.DB.PORT || 3606,
   database: CONFIG.DB.DATABASE,
   synchronize: true,
-  entities: [
-    "./src/entity/*.ts"
-  ],
-  logging: true,
+  entities: ["./src/entity/*.ts"],
+  logging: true
 } as MysqlConnectionOptions).then(() => {
   // view engine setup
   app.set("views", path.join(__dirname, "views"));

@@ -31,9 +31,10 @@ bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, async (ctx, next) => {
   const max = Math.max(ctx.match[1] || 0, ctx.match[2] || 0);
   const reply = await axios
     .get(CONFIG.FEATURES.RANDOM_URL.PROVIDER, { params: { min, max } })
-    .catch(() => {});
+    .catch(() => null);
 
   if (!reply || !reply.data || !reply.data.id) {
+    await ctx.reply(`Ни одного маршрута, надо же!\n\nНо ты можешь создать свой: ${CONFIG.FEATURES.RANDOM_URL.HOST}`)
     return next();
   }
 

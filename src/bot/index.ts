@@ -23,7 +23,7 @@ bot.command("ping", async (ctx, next) => {
 });
 
 bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, async (ctx, next) => {
-  const diff = +new Date/1000 - ctx.message.date;
+  const diff = +new Date() / 1000 - ctx.message.date;
 
   if (diff >= 120) return next();
 
@@ -34,7 +34,10 @@ bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, async (ctx, next) => {
     .catch(() => null);
 
   if (!reply || !reply.data || !reply.data.id) {
-    await ctx.reply(`Ни одного маршрута, надо же!\n\nНо ты можешь создать свой: ${CONFIG.FEATURES.RANDOM_URL.HOST}`)
+    await ctx.reply(
+      `Ни одного маршрута, надо же! Но ты можешь создать свой:\n${CONFIG.FEATURES.RANDOM_URL.HOST}`,
+      { disable_web_page_preview: true }
+    );
     return next();
   }
 
@@ -44,9 +47,7 @@ bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, async (ctx, next) => {
 
   await ctx.reply(
     `${reply.data.title} (${reply.data.distance}км):\n${description}\n${CONFIG.FEATURES.RANDOM_URL.HOST}${reply.data.id}`,
-    {
-      disable_web_page_preview: true
-    }
+    { disable_web_page_preview: true }
   );
 
   return next();

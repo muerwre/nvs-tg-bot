@@ -17,6 +17,7 @@ console.log({ DB: CONFIG.DB });
 
 createConnection({
   type: "mysql",
+  host: CONFIG.DB.HOSTNAME,
   username: CONFIG.DB.USER,
   password: CONFIG.DB.PASSWORD,
   port: CONFIG.DB.PORT || 3606,

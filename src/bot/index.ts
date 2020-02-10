@@ -4,7 +4,8 @@ import { makeKB } from "../utils/merkup";
 import { EMOTIONS } from "../const";
 import { Vote } from "../entity/Vote";
 import { Post } from "../entity/Post";
-import axios from "axios";
+import { rollResponser } from "src/responsers/rollResponser";
+import Axios from "axios";
 
 const SocksProxyAgent = require("socks-proxy-agent");
 const Telegraf = require("telegraf");
@@ -18,40 +19,38 @@ const options = {
 
 const bot = new Telegraf(CONFIG.TELEGRAM.key, options);
 
+bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
+  const url = `${CONFIG.FEATURES.SEARCH.URL}${encodeURIComponent(inlineQuery.query)}`;
+  const response = await Axios.get(url);
+
+  console.log({ url })
+  console.log({ data: response.data.routes })
+
+  const routes =
+    response && response.data && response.data.routes
+      ? response.data.routes
+          .filter(({ address }) => address)
+          .map(({ address, title, distance, description }) => ({
+            type: "article",
+            id: address,
+            title,
+            description: `${title} (${distance}км)\n${CONFIG.FEATURES.SEARCH.HOST}${address}`,
+            input_message_content: {
+              message_text: `${title} (${distance}км)\n${CONFIG.FEATURES.SEARCH.HOST}${address}`
+            }
+          }))
+      : [];
+
+  console.log(routes);
+  return answerInlineQuery(routes, { disable_web_page_preview: true }); 
+  // return answerInlineQuery([]); 
+});
+
 bot.command("ping", async (ctx, next) => {
   return await ctx.reply(`pong`);
 });
 
-bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, async (ctx, next) => {
-  const diff = +new Date() / 1000 - ctx.message.date;
-
-  if (diff >= 120) return next();
-
-  const min = Math.min(ctx.match[1] || 0, ctx.match[2] || 0);
-  const max = Math.max(ctx.match[1] || 0, ctx.match[2] || 0);
-  const reply = await axios
-    .get(CONFIG.FEATURES.RANDOM_URL.PROVIDER, { params: { min, max } })
-    .catch(() => null);
-
-  if (!reply || !reply.data || !reply.data.id) {
-    await ctx.reply(
-      `Ни одного маршрута, надо же! Но ты можешь создать свой:\n${CONFIG.FEATURES.RANDOM_URL.HOST}`,
-      { disable_web_page_preview: true }
-    );
-    return next();
-  }
-
-  const description = reply.data.description
-    ? `${reply.data.description}\n`
-    : "";
-
-  await ctx.reply(
-    `${reply.data.title} (${reply.data.distance}км):\n${description}\n${CONFIG.FEATURES.RANDOM_URL.HOST}${reply.data.id}`,
-    { disable_web_page_preview: true }
-  );
-
-  return next();
-});
+bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, rollResponser);
 
 bot.action(/emo \[(\d+)\]/, async ctx => {
   const { message = {}, from = {} } =

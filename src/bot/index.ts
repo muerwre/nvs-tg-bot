@@ -22,8 +22,11 @@ bot.command("ping", async (ctx, next) => {
   return await ctx.reply(`pong`);
 });
 
-bot.command("roll", async (ctx, next) => {
-  const reply = await axios.get(CONFIG.FEATURES.RANDOM_URL.PROVIDER)
+bot.hears(/^\/go\s?(\d{0,})\s?(\d{0,})?/igm, async (ctx, next) => {
+  const min = Math.min(ctx.match[1] || 0, ctx.match[2] || 0)
+  const max = Math.max(ctx.match[1] || 0, ctx.match[2] || 0)
+
+  const reply = await axios.get(CONFIG.FEATURES.RANDOM_URL.PROVIDER, { params: { min, max } })
 
   if (!reply || !reply.data || !reply.data.id) {
     return next();

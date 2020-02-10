@@ -25,8 +25,6 @@ bot.command("ping", async (ctx, next) => {
 bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, async (ctx, next) => {
   const diff = +new Date/1000 - ctx.message.date;
 
-  console.log({ diff });
-
   if (diff >= 120) return next();
 
   const min = Math.min(ctx.match[1] || 0, ctx.match[2] || 0);

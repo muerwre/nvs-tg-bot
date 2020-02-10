@@ -10,19 +10,22 @@ import { url } from "$config/db";
 import mainRouter from "./routes/main";
 import { createConnection } from "typeorm";
 import { CONFIG } from "$config/server";
+import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOptions";
 
 const app = express();
 
 createConnection({
   type: "mysql",
-  url,
-  synchronize: true,
+  username: CONFIG.DB.USER,
+  password: CONFIG.DB.PASSWORD,
+  port: CONFIG.DB.PORT || 3606,
   database: CONFIG.DB.DATABASE,
+  synchronize: true,
   entities: [
     "./src/entity/*.ts"
   ],
   logging: true,
-}).then(() => {
+} as MysqlConnectionOptions).then(() => {
   // view engine setup
   app.set("views", path.join(__dirname, "views"));
   app.set("view engine", "pug");

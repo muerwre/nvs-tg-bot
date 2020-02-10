@@ -6,7 +6,6 @@ import * as cookieParser from "cookie-parser";
 import * as lessMiddleware from "less-middleware";
 import * as logger from "morgan";
 import * as bodyParser from "body-parser";
-import { url } from "$config/db";
 import mainRouter from "./routes/main";
 import { createConnection } from "typeorm";
 import { CONFIG } from "$config/server";

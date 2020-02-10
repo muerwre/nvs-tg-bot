@@ -22,7 +22,7 @@ bot.command("ping", async (ctx, next) => {
   return await ctx.reply(`pong`);
 });
 
-bot.hears(/^\/go\s?(\d{0,})\s?(\d{0,})?/igm, async (ctx, next) => {
+bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/igm, async (ctx, next) => {
   const min = Math.min(ctx.match[1] || 0, ctx.match[2] || 0)
   const max = Math.max(ctx.match[1] || 0, ctx.match[2] || 0)
 

@@ -25,11 +25,17 @@ bot.command("ping", async (ctx, next) => {
 bot.command("roll", async (ctx, next) => {
   const reply = await axios.get(CONFIG.FEATURES.RANDOM_URL.PROVIDER)
 
-  if (!reply || !reply.data || !reply.data.url) {
+  if (!reply || !reply.data || !reply.data.id) {
     return next();
   }
 
-  return await ctx.reply(`${CONFIG.FEATURES.RANDOM_URL.HOST}${reply.data.url}`);
+  const description = reply.data.description ? `${reply.data.description}\n` : '';
+  return await ctx.reply(
+    `${reply.data.title} (${reply.data.distance}км):\n${description}\n${CONFIG.FEATURES.RANDOM_URL.HOST}${reply.data.id}`,
+    {
+      disable_web_page_preview: true,
+    }
+  );
 });
 
 bot.action(/emo \[(\d+)\]/, async ctx => {

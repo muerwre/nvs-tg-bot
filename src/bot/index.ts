@@ -4,7 +4,7 @@ import { makeKB } from "../utils/merkup";
 import { EMOTIONS } from "../const";
 import { Vote } from "../entity/Vote";
 import { Post } from "../entity/Post";
-import { rollResponser } from "../responsers/rollResponser";
+// import { rollResponser } from "../responsers/rollResponser";
 import Axios from "axios";
 
 const SocksProxyAgent = require("socks-proxy-agent");
@@ -50,7 +50,7 @@ bot.command("ping", async (ctx, next) => {
   return await ctx.reply(`pong`);
 });
 
-bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, rollResponser);
+// bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, rollResponser);
 
 bot.action(/emo \[(\d+)\]/, async ctx => {
   const { message = {}, from = {} } =

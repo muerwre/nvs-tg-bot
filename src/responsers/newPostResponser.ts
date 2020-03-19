@@ -148,7 +148,7 @@ export const newPostResponser = async (
         .sendPhoto(chat, images[0].media, {
           caption: `${cutText(parsed, text_limit)}${link}`,
           parse_mode: "HTML",
-          disable_web_page_preview: true,
+          disable_web_page_preview: null, 
           ...extras
         })
         .catch(error => {

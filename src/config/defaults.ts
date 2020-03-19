@@ -56,6 +56,9 @@ export const DEFAULTS = {
       URL: "https://map.vault48.org:3000/api/route/list/starred?min=0&max=10000&step=20&shift=0&search=",
       HOST: "https://map.vault48.org/",
     }
+  },
+  WATCHDOG: {
+    SECRET: 'SECRET',
   }
 };
 

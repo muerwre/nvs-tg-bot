@@ -4,6 +4,7 @@ import { makeKB } from "../utils/merkup";
 import { EMOTIONS } from "../const";
 import { Vote } from "../entity/Vote";
 import { Post } from "../entity/Post";
+// import Telegraf from 'telegraf';
 // import { rollResponser } from "../responsers/rollResponser";
 // import Axios from "axios";
 
@@ -126,5 +127,6 @@ bot.action(/emo \[(\d+)\]/, async ctx => {
 });
 
 bot.launch();
+
 
 export default bot;

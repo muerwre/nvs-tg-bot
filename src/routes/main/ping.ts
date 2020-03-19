@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CONFIG } from "$config/server";
-import bot from "src/bot";
+import bot from "../../bot";
 
 export default async (req: Request, res: Response) => {
   try {

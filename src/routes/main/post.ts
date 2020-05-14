@@ -19,6 +19,8 @@ const handler = async (
       return res.status(401).send("Invalid credentials");
     }
 
+    res.send(OK_RESPONSE);
+
     if (type === TYPES.CONFIRMATION) {
       return RESPONSERS[type](req, res);
     } else if (
@@ -49,7 +51,7 @@ const handler = async (
       }
     }
 
-    return res.send(OK_RESPONSE);
+    return;
   } catch (e) {
     console.log(e);
   }

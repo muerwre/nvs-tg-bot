@@ -10,7 +10,7 @@ services:
       - ${EXPOSE}:${PORT}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-    entrypoint: ./wait-for-it.sh mariadb:3306 -- node ./bin/server.js
+    entrypoint: ./wait-for-it.sh -t 90 mariadb:3306 -- node ./bin/server.js
     depends_on: 
         - db
   db:

@@ -26,6 +26,6 @@ services:
     ports: 
       - 3316:3306
     volumes:
-      - /opt/tg-bot/mysql:/var/lib/mysql
+      - ${MYSQL_VOLUME}:/var/lib/mysql
 volumes:
   node_modules:

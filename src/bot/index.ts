@@ -11,8 +11,7 @@ const Telegraf = require("telegraf");
 const agent = (CONFIG.PROXY && new SocksProxyAgent(CONFIG.PROXY)) || null;
 const options = {
   channelMode: true,
-  telegram: { agent },
-  agent
+  telegram: { agent, webhookReply: true },
 };
 
 const bot = new Telegraf(CONFIG.TELEGRAM.key, options);

@@ -64,7 +64,7 @@
     "reflect-metadata": "^0.1.13",
     "scrypt": "^6.0.3",
     "socks-proxy-agent": "^4.0.2",
-    "telegraf": "^3.27.1",
+    "telegraf": "3.37.0",
     "throttle-debounce": "^2.1.0",
     "typeorm": "^0.2.22"
   },

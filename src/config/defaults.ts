@@ -43,7 +43,8 @@ export const DEFAULTS = {
     USER: "root",
     PASSWORD: "password",
     HOSTNAME: "mariadb",
-    DATABASE: "tg_bot"
+    DATABASE: "tg_bot",
+    PORT: 3306
   },
   FEATURES: {
     RANDOM_URL: {

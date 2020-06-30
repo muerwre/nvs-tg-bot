@@ -1,0 +1,31 @@
+version: '3'
+services:
+  app:
+    container_name: bot
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${EXPOSE}:${PORT}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    entrypoint: ./wait-for-it.sh mariadb:3306 -- node ./bin/server.js
+    depends_on: 
+        - db
+  db:
+    container_name: mariadb
+    restart: always
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_USER: 'user@%'
+      MYSQL_PASS: 'pass'
+      MYSQL_DATABASE: 'tg_bot'
+      MYSQL_ROOT_HOST: '%' 
+    ports: 
+      - 3316:3306
+    volumes:
+      - /opt/tg-bot/mysql:/var/lib/mysql
+volumes:
+  node_modules:

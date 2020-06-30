@@ -6,7 +6,6 @@
   "scripts": {
     "start": "npm i && node ./dist/bin/server",
     "build": "rm -rf ./dist && tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
-    "prepare": "npm run build",
     "dev": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

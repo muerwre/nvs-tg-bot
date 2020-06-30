@@ -23,8 +23,6 @@ services:
       MYSQL_PASS: 'pass'
       MYSQL_DATABASE: 'tg_bot'
       MYSQL_ROOT_HOST: '%' 
-    ports: 
-      - 3316:3306
     volumes:
       - ${MYSQL_VOLUME}:/var/lib/mysql
 volumes:

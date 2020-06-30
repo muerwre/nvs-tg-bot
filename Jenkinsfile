@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {        
-        ENV = env.TG_BOT_ENV
+        ENV = "${env.TG_BOT_ENV}"
         TZ = "\$(readlink /etc/localtime | sed 's#/usr/share/zoneinfo/##')"
     }
 

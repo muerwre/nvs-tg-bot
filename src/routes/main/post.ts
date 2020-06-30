@@ -9,7 +9,7 @@ const handler = async (
 ): Promise<express.Response> => {
   try {
     const {
-      body: { type, group_id, secret, object }
+      body: { type, group_id, secret, object },
     } = req;
 
     if (
@@ -19,8 +19,6 @@ const handler = async (
       return res.status(401).send("Invalid credentials");
     }
 
-    res.send(OK_RESPONSE);
-
     if (type === TYPES.CONFIRMATION) {
       return RESPONSERS[type](req, res);
     } else if (
@@ -28,22 +26,26 @@ const handler = async (
       object &&
       object.post_type === "suggest"
     ) {
+      res.send(OK_RESPONSE);
+
       // intercept post suggestions
       if (
         CHANNELS[TYPES.POST_SUGGESTION] &&
         RESPONSERS[TYPES.POST_SUGGESTION]
       ) {
         await Promise.all(
-          CHANNELS[TYPES.POST_SUGGESTION].map(chan =>
+          CHANNELS[TYPES.POST_SUGGESTION].map((chan) =>
             RESPONSERS[TYPES.POST_SUGGESTION](req, res, chan)
           )
         );
       }
     } else {
+      res.send(OK_RESPONSE);
+      
       if (CHANNELS[type]) {
         await Promise.all(
           CHANNELS[type].map(
-            chan =>
+            (chan) =>
               (RESPONSERS[type] && RESPONSERS[type](req, res, chan)) ||
               RESPONSERS.DEFAULT(req, res)
           )

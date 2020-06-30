@@ -4,9 +4,6 @@ import { makeKB } from "../utils/merkup";
 import { EMOTIONS } from "../const";
 import { Vote } from "../entity/Vote";
 import { Post } from "../entity/Post";
-// import Telegraf from 'telegraf';
-// import { rollResponser } from "../responsers/rollResponser";
-// import Axios from "axios";
 
 const SocksProxyAgent = require("socks-proxy-agent");
 const Telegraf = require("telegraf");
@@ -20,38 +17,9 @@ const options = {
 
 const bot = new Telegraf(CONFIG.TELEGRAM.key, options);
 
-// bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
-//   const url = `${CONFIG.FEATURES.SEARCH.URL}${encodeURIComponent(inlineQuery.query)}`;
-//   const response = await Axios.get(url);
-
-//   console.log({ url })
-//   console.log({ data: response.data.routes })
-
-//   const routes =
-//     response && response.data && response.data.routes
-//       ? response.data.routes
-//           .filter(({ address }) => address)
-//           .map(({ address, title, distance, description }) => ({
-//             type: "article",
-//             id: address,
-//             title,
-//             description: `${title} (${distance}км)\n${CONFIG.FEATURES.SEARCH.HOST}${address}`,
-//             input_message_content: {
-//               message_text: `${title} (${distance}км)\n${CONFIG.FEATURES.SEARCH.HOST}${address}`
-//             }
-//           }))
-//       : [];
-
-//   console.log(routes);
-//   return answerInlineQuery(routes, { disable_web_page_preview: true });
-//   // return answerInlineQuery([]);
-// });
-
 bot.command("ping", async (ctx, next) => {
   return await ctx.reply(`pong`);
 });
-
-// bot.hears(/^\/roll\s?(\d{0,})\s?(\d{0,})?/gim, rollResponser);
 
 bot.action(/emo \[(\d+)\]/, async ctx => {
   try {

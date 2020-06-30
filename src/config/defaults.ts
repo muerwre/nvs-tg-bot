@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 export const DEFAULT_TYPES = {
   CONFIRMATION: "confirmation",
   NEW_POST: "wall_post_new",
@@ -10,7 +12,7 @@ export const DEFAULT_TYPES = {
 export const DEFAULTS = {
   HTTP: {
     ENABLED: true,
-    PORT: 3002 // port to listen on
+    PORT: process.env.PORT || 3002 // port to listen on
   },
   VK: {
     group_id: 0,

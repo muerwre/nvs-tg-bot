@@ -13,7 +13,7 @@ import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOpti
 
 const app = express();
 
-console.log(__dirname, { DB: CONFIG.DB });
+console.log(`HTTP ATTACHED TO ON ${CONFIG.HTTP.PORT}`)
 
 createConnection({
   type: "mysql",

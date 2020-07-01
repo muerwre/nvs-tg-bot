@@ -25,10 +25,5 @@ services:
     entrypoint: ./wait-for-it.sh -t 90 db:3306 -- node ./bin/server.js
     depends_on: 
         - db
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:$PORT/healthcheck"]
-      interval: 5m
-      timeout: 30s
-      retries: 1
 volumes:
   node_modules:

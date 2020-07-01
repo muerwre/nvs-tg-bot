@@ -16,7 +16,7 @@ services:
     container_name: bot
     restart: always
     environment: 
-      - PORT: ${PORT}
+      - PORT: "${PORT}"
     build:
       context: .
       dockerfile: Dockerfile

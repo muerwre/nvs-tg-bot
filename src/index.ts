@@ -10,10 +10,16 @@ import mainRouter from "./routes/main";
 import { createConnection } from "typeorm";
 import { CONFIG } from "$config/server";
 import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOptions";
+var process = require('process')
 
 const app = express();
 
 console.log(`HTTP ATTACHED TO ON ${CONFIG.HTTP.PORT}`)
+
+process.on('SIGINT', () => {
+  console.info("Interrupted")
+  process.exit(0)
+})
 
 createConnection({
   type: "mysql",

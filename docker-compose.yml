@@ -29,6 +29,6 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:$PORT/healthcheck"]
       interval: 5m
       timeout: 30s
-      retries: 3
+      retries: 1
 volumes:
   node_modules:

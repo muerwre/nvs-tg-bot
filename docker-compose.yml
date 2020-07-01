@@ -15,6 +15,8 @@ services:
   app:
     container_name: bot
     restart: always
+    environment: 
+      - PORT: ${PORT}
     build:
       context: .
       dockerfile: Dockerfile
@@ -26,7 +28,7 @@ services:
     depends_on: 
         - db
     healthcheck:
-      test: ["CMD", "curl -f http://localhost:$${PORT}/healthcheck"]
+      test: ["CMD", "curl -f http://localhost:$PORT/healthcheck"]
       interval: 30s
       timeout: 30s
       retries: 3

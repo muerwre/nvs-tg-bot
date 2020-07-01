@@ -1,4 +1,4 @@
-import bot from "src/bot";
+import bot from "../../bot";
 
 export default (req, res) =>
   bot.telegram

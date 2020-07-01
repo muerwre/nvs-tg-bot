@@ -44,7 +44,7 @@ export const DEFAULTS = {
     // matches docker-compose, override if needed
     USER: "root",
     PASSWORD: "password",
-    HOSTNAME: "mariadb",
+    HOSTNAME: "db",
     DATABASE: "tg_bot",
     PORT: 3306
   },

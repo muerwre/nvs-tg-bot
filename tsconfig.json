@@ -13,7 +13,8 @@
     "jsx": "react",
     "baseUrl": ".",
     "paths": {
-      "$config/*": [ "./src/config/*" ]
+      "$config/*": ["./src/config/*"],
+      "~/*": ["./src/*"]
     }
   },
   "include": [

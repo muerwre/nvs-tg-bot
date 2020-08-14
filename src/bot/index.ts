@@ -1,12 +1,13 @@
-import "reflect-metadata";
-import { CONFIG } from "$config/server";
-import { makeKB } from "../utils/merkup";
-import { EMOTIONS } from "../const";
-import { Vote } from "../entity/Vote";
-import { Post } from "../entity/Post";
+import 'reflect-metadata';
+import { CONFIG } from '~/config/server';
+import { makeKB } from '~/utils/merkup';
+import { EMOTIONS } from '~/const';
+import { Vote } from '~/entity/Vote';
+import { Post } from '~/entity/Post';
+import { checkHealth } from '~/utils/healthcheck';
 
-const SocksProxyAgent = require("socks-proxy-agent");
-const Telegraf = require("telegraf");
+const SocksProxyAgent = require('socks-proxy-agent');
+const Telegraf = require('telegraf');
 
 const agent = (CONFIG.PROXY && new SocksProxyAgent(CONFIG.PROXY)) || null;
 const options = {
@@ -16,14 +17,16 @@ const options = {
 
 const bot = new Telegraf(CONFIG.TELEGRAM.key, options);
 
-bot.command("ping", async (ctx, next) => {
-  return await ctx.reply(`pong`);
+bot.command('ping', async (ctx) => {
+  checkHealth().then(
+    () => ctx.reply('pong'),
+    () => ctx.reply("I'm not okay, Borya. Help me :-(")
+  );
 });
 
-bot.action(/emo \[(\d+)\]/, async ctx => {
+bot.action(/emo \[(\d+)\]/, async (ctx) => {
   try {
-    const { message = {}, from = {} } =
-      (ctx && ctx.update && ctx.update.callback_query) || {};
+    const { message = {}, from = {} } = (ctx && ctx.update && ctx.update.callback_query) || {};
 
     const { match = [] } = ctx;
     const emo_id = (match[1] && parseInt(match[1])) || 0;
@@ -35,7 +38,7 @@ bot.action(/emo \[(\d+)\]/, async ctx => {
     const chat_id: number = message.chat.id;
 
     const vote = await Vote.findOne({
-      where: { user_id, message_id, chat_id }
+      where: { user_id, message_id, chat_id },
     });
 
     if (vote) {
@@ -46,18 +49,18 @@ bot.action(/emo \[(\d+)\]/, async ctx => {
         user_id,
         message_id,
         emo_id,
-        chat_id: chat_id.toString()
+        chat_id: chat_id.toString(),
       }).save();
     }
 
     // count all likes from db by type
     const emos = await Vote.find({
-      where: { message_id, chat_id: chat_id.toString() }
-    }).then(result =>
+      where: { message_id, chat_id: chat_id.toString() },
+    }).then((result) =>
       result.reduce(
         (obj, emo) => ({
           ...obj,
-          [emo.emo_id]: (obj[emo.emo_id] || 0) + 1
+          [emo.emo_id]: (obj[emo.emo_id] || 0) + 1,
         }),
         {}
       )
@@ -67,14 +70,14 @@ bot.action(/emo \[(\d+)\]/, async ctx => {
     const list = Object.keys(EMOTIONS).map((em, i) => emos[i] || 0);
 
     const post = await Post.findOne({
-      where: { chat_id: chat_id.toString(), message_id }
+      where: { chat_id: chat_id.toString(), message_id },
     });
     const {
       map_url = null,
       post_url = null,
       is_cutted = false,
       topic_url = null,
-      album_url = null
+      album_url = null,
     } = post || {};
 
     const extras = {
@@ -83,8 +86,8 @@ bot.action(/emo \[(\d+)\]/, async ctx => {
         post_url,
         is_cutted,
         topic_url,
-        album_url
-      })
+        album_url,
+      }),
     };
 
     await ctx.editMessageReplyMarkup(extras).catch(console.log);
@@ -94,6 +97,5 @@ bot.action(/emo \[(\d+)\]/, async ctx => {
 });
 
 bot.launch();
-
 
 export default bot;

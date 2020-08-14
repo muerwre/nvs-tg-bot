@@ -1,7 +1,7 @@
-import bot from "../../bot";
+import { checkHealth } from '~/utils/healthcheck';
 
 export default (req, res) =>
-  bot.telegram
-    .getMe()
-    .then(() => res.sendStatus(200))
-    .catch(() => res.sendStatus(503));
+  checkHealth().then(
+    () => res.sendStatus(200),
+    () => res.sendStatus(503)
+  );

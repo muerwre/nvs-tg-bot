@@ -1,11 +1,5 @@
-const handler = async (req, res) => {
-  // const { query: { name } } = req;
-  console.log('REQ IS', req);
-
-  return res.send({
-    success: true,
-    // req,
-  });
-};
+const handler = async (req, res) => res.send({
+  success: true,
+});
 
 export default handler;

@@ -8,12 +8,13 @@ services:
       MYSQL_USER: 'user@%'
       MYSQL_PASS: 'pass'
       MYSQL_DATABASE: 'tg_bot'
-      MYSQL_ROOT_HOST: '%' 
+      MYSQL_ROOT_HOST: '%'
     volumes:
       - ${MYSQL_VOLUME}:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
   app:
     restart: always
-    environment: 
+    environment:
       PORT: ${PORT}
     build:
       context: .
@@ -23,7 +24,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     entrypoint: ./wait-for-it.sh -t 90 db:3306 -- node ./bin/server.js
-    depends_on: 
+    depends_on:
         - db
 volumes:
   node_modules:

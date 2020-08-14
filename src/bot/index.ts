@@ -19,7 +19,10 @@ const bot = new Telegraf(CONFIG.TELEGRAM.key, options);
 
 bot.command('ping', async (ctx) => {
   checkHealth().then(
-    () => ctx.reply('pong'),
+    () =>
+      ctx.replyWithSticker(
+        'CAACAgIAAxkBAAIB6F82KSeJBEFer895bb7mFI7_GzYoAAISAAOwODIrOXeFNb5v4aEaBA'
+      ),
     () => ctx.reply("I'm not okay, Borya. Help me :-(")
   );
 });

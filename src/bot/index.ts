@@ -105,7 +105,7 @@ if (CONFIG.HTTP.WEBHOOK_HOST && CONFIG.HTTP.WEBHOOK_URL) {
 
   bot.telegram
     .setWebhook(url.href)
-    .then(() => bot.launch())
+    // .then(() => bot.launch())
     .catch((e) => {
       console.warn(e.message);
       process.exit();

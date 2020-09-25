@@ -55,8 +55,9 @@ createConnection({
   if (CONFIG.HTTP.WEBHOOK_URL) {
     console.log(`USING WEBHOOKCALLBACK AT ${CONFIG.HTTP.WEBHOOK_URL}`);
 
-    app.post(CONFIG.HTTP.WEBHOOK_URL, (req, res) => {
-      return bot.handleUpdate(req.body, res).catch(console.warn).then(console.log);
+    app.post(CONFIG.HTTP.WEBHOOK_URL, async (req, res) => {
+      await bot.handleUpdate(req.body, res).catch(console.warn).then(console.log);
+      return res.sendStatus(200);
     });
   }
 

@@ -49,13 +49,13 @@ createConnection({
     next();
   });
 
+  app.use(bodyParser.json());
+  app.use(express.json());
+
   if (CONFIG.HTTP.WEBHOOK_URL) {
     console.log(`USING WEBHOOKCALLBACK AT ${CONFIG.HTTP.WEBHOOK_URL}`);
     app.use(bot.webhookCallback(CONFIG.HTTP.WEBHOOK_URL));
   }
-
-  app.use(bodyParser.json());
-  app.use(express.json());
 
   app.use('/', mainRouter);
 

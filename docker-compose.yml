@@ -12,6 +12,8 @@ services:
     volumes:
       - ${MYSQL_VOLUME}:/var/lib/mysql
       - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 3306:3306
   app:
     restart: always
     environment:

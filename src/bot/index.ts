@@ -105,6 +105,12 @@ bot.action(/emo \[(\d+)\]/, async (ctx) => {
   }
 });
 
-bot.launch();
+bot.launch().then(async () => {
+  if (CONFIG.HTTP.WEBHOOK_HOST && CONFIG.HTTP.WEBHOOK_URL) {
+    const url = new URL(CONFIG.HTTP.WEBHOOK_URL, CONFIG.HTTP.WEBHOOK_HOST);
+    console.log(`Bot webhook started at ${url.href}`);
+    await bot.telegram.setWebhook(url.href).then(console.log, console.log);
+  }
+});
 
 export default bot;

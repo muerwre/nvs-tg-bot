@@ -99,25 +99,32 @@ bot.action(/emo \[(\d+)\]/, async (ctx) => {
   }
 });
 
-if (CONFIG.HTTP.WEBHOOK_HOST && CONFIG.HTTP.WEBHOOK_URL) {
-  const url = new URL(CONFIG.HTTP.WEBHOOK_URL, CONFIG.HTTP.WEBHOOK_HOST);
-  console.log(`Starting webhook at ${url}`);
+bot.telegram.deleteWebhook().then(
+  () => bot.launch(),
+  () => bot.launch()
+);
+// bot.launch();
 
-  bot.telegram
-    .setWebhook(url.href)
-    .catch((e) => {
-      console.warn(e.message);
-      process.exit();
-    });
-} else {
-  bot.telegram
-    .deleteWebhook()
-    .catch(console.warn)
-    .then(() => bot.launch())
-    .catch((e) => {
-      console.warn(e.message);
-      process.exit();
-    });
-}
+// this stucks at simple messages:
+// if (CONFIG.HTTP.WEBHOOK_HOST && CONFIG.HTTP.WEBHOOK_URL) {
+//   const url = new URL(CONFIG.HTTP.WEBHOOK_URL, CONFIG.HTTP.WEBHOOK_HOST);
+//   console.log(`Starting webhook at ${url}`);
+//
+//   bot.telegram
+//     .setWebhook(url.href)
+//     .catch((e) => {
+//       console.warn(e.message);
+//       process.exit();
+//     });
+// } else {
+//   bot.telegram
+//     .deleteWebhook()
+//     .catch(console.warn)
+//     .then(() => bot.launch())
+//     .catch((e) => {
+//       console.warn(e.message);
+//       process.exit();
+//     });
+// }
 
 export default bot;

@@ -20,7 +20,7 @@ const bot = new Telegraf(CONFIG.TELEGRAM.key, options);
 if (CONFIG.HTTP.WEBHOOK_HOST && CONFIG.HTTP.WEBHOOK_URL) {
   const url = new URL(CONFIG.HTTP.WEBHOOK_URL, CONFIG.HTTP.WEBHOOK_HOST);
   console.log(`Bot webhook started at ${url.href}`);
-  bot.telegram.setWebhook(url.href);
+  bot.telegram.setWebhook(url.href, null, 443);
 }
 
 bot.command('ping', async (ctx) => {

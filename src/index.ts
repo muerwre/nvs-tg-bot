@@ -54,7 +54,10 @@ createConnection({
 
   if (CONFIG.HTTP.WEBHOOK_URL) {
     console.log(`USING WEBHOOKCALLBACK AT ${CONFIG.HTTP.WEBHOOK_URL}`);
-    app.use(bot.webhookCallback(CONFIG.HTTP.WEBHOOK_URL));
+
+    app.post(CONFIG.HTTP.WEBHOOK_URL, (req, res) => {
+      return bot.handleUpdate(req.body, res);
+    });
   }
 
   app.use('/', mainRouter);

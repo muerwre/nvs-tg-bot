@@ -10,6 +10,7 @@ import mainRouter from './routes/main';
 import { createConnection } from 'typeorm';
 import { CONFIG } from '$config/server';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
+import bot from '~/bot';
 var process = require('process');
 
 const app = express();
@@ -47,6 +48,11 @@ createConnection({
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
   });
+
+  if (CONFIG.HTTP.WEBHOOK_URL) {
+    console.log(`USING WEBHOOKCALLBACK AT ${CONFIG.HTTP.WEBHOOK_URL}`);
+    app.use(bot.webhookCallback(CONFIG.HTTP.WEBHOOK_URL));
+  }
 
   app.use(bodyParser.json());
   app.use(express.json());

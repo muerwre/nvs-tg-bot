@@ -61,7 +61,7 @@
     "nodemon": "^2.0.2",
     "npm": "^6.14.2",
     "path": "^0.12.7",
-    "pug": "2.0.0-beta11",
+    "pug": "3.0.1",
     "reflect-metadata": "^0.1.13",
     "scrypt": "^6.0.3",
     "socks-proxy-agent": "^4.0.2",

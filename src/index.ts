@@ -3,12 +3,11 @@ import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import lessMiddleware from 'less-middleware';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import mainRouter from './routes/main';
 import { createConnection } from 'typeorm';
-import { CONFIG } from '$config/server';
+import { CONFIG } from '~/config/server';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 import bot from '~/bot';
 var process = require('process');
@@ -40,8 +39,6 @@ createConnection({
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use(lessMiddleware(path.join(__dirname, 'public')));
-  app.use(express.static(path.join(__dirname, 'public')));
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH');

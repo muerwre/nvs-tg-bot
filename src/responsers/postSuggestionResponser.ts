@@ -1,13 +1,15 @@
-import { CONFIG } from "$config/server";
+import { CONFIG } from '~/config/server';
 import bot from '../bot';
 import * as express from 'express';
-import { cutText,  makePostUrl, parseAttachments } from "../utils/vk_media";
-import { INewPostObject } from "./newPostResponser";
-import { getUserName } from "../utils/vk_api";
+import { cutText, makePostUrl, parseAttachments } from '../utils/vk_media';
+import { INewPostObject } from './newPostResponser';
+import { getUserName } from '../utils/vk_api';
 
-
-
-export const postSuggestionResponser = async (req: express.Request, res: express.Response, chat?: string): Promise<boolean> => {
+export const postSuggestionResponser = async (
+  req: express.Request,
+  res: express.Response,
+  chat?: string
+): Promise<boolean> => {
   if (!chat) return;
 
   const { object, group_id } = req.body as INewPostObject;
@@ -23,19 +25,15 @@ export const postSuggestionResponser = async (req: express.Request, res: express
     ? `[${name}](https://vk.com/id${from_id})`
     : `[https://vk.com/id${from_id}](https://vk.com/id${from_id})`;
 
-  await bot.telegram.sendMessage(
-    chat,
-    cutText(`(Предложка) ${link}:\n\n${text}`, text_limit),
-    {
+  await bot.telegram
+    .sendMessage(chat, cutText(`(Предложка) ${link}:\n\n${text}`, text_limit), {
       reply_markup: {
-        inline_keyboard: [[
-          { text: 'Посмотреть пост', url: makePostUrl(group_id, object.id) }
-        ]],
+        inline_keyboard: [[{ text: 'Посмотреть пост', url: makePostUrl(group_id, object.id) }]],
       },
       parse_mode: 'Markdown',
       disable_web_page_preview: true,
-    },
-  ).catch(() => false);
+    })
+    .catch(() => false);
 
   return true;
 };

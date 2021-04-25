@@ -1,4 +1,4 @@
-import { CONFIG } from "$config/server";
+import { CONFIG } from '~/config/server';
 
 const SocksProxyAgent = require('socks-proxy-agent');
 const Telegram = require('telegraf/telegram');

@@ -1,6 +1,5 @@
-
-import { CONFIG } from "$config/server";
-import axios from "axios";
+import { CONFIG } from '~/config/server';
+import axios from 'axios';
 
 export const rollResponser = async (ctx, next) => {
   const diff = +new Date() / 1000 - ctx.message.date;
@@ -21,9 +20,7 @@ export const rollResponser = async (ctx, next) => {
     return next();
   }
 
-  const description = reply.data.description
-    ? `${reply.data.description}\n`
-    : "";
+  const description = reply.data.description ? `${reply.data.description}\n` : '';
 
   await ctx.reply(
     `${reply.data.title} (${reply.data.distance}км):\n${description}\n${CONFIG.FEATURES.RANDOM_URL.HOST}${reply.data.id}`,
@@ -31,4 +28,4 @@ export const rollResponser = async (ctx, next) => {
   );
 
   return next();
-}
+};

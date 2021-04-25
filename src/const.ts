@@ -1,11 +1,11 @@
-import { confirmationResponser } from "./responsers/confirmationResponser";
-import { defaultResponser } from "./responsers/defaultResponser";
-import { newPostResponser } from "./responsers/newPostResponser";
-import { TYPES } from "$config/server";
+import { confirmationResponser } from './responsers/confirmationResponser';
+import { defaultResponser } from './responsers/defaultResponser';
+import { newPostResponser } from './responsers/newPostResponser';
+import { TYPES } from '~/config/server';
 import * as express from 'express';
-import { groupJoinResponder } from "./responsers/groupJoinResponder";
-import { postSuggestionResponser } from "./responsers/postSuggestionResponser";
-import { messageNewResponser } from "./responsers/messageNewResponser";
+import { groupJoinResponder } from './responsers/groupJoinResponder';
+import { postSuggestionResponser } from './responsers/postSuggestionResponser';
+import { messageNewResponser } from './responsers/messageNewResponser';
 
 // export const TYPES = {
 //   CONFIRMATION: 'confirmation',
@@ -13,7 +13,7 @@ import { messageNewResponser } from "./responsers/messageNewResponser";
 // };
 
 interface IResponsers {
-  [x: string]: (req: express.Request, res: express.Response, chat?: string) => Promise<any>,
+  [x: string]: (req: express.Request, res: express.Response, chat?: string) => Promise<any>;
 }
 
 export const RESPONSERS: IResponsers = {

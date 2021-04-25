@@ -1,13 +1,13 @@
 import 'reflect-metadata';
+import { Telegraf } from 'telegraf';
 import { CONFIG } from '~/config/server';
 import { makeKB } from '~/utils/merkup';
 import { EMOTIONS } from '~/const';
 import { Vote } from '~/entity/Vote';
 import { Post } from '~/entity/Post';
 import { checkHealth } from '~/utils/healthcheck';
-
+import { makeExtras } from '~/utils/extras';
 const SocksProxyAgent = require('socks-proxy-agent');
-const Telegraf = require('telegraf');
 
 const agent = (CONFIG.PROXY && new SocksProxyAgent(CONFIG.PROXY)) || null;
 const options = {
@@ -29,9 +29,9 @@ bot.command('ping', async (ctx) => {
 
 bot.action(/emo \[(\d+)\]/, async (ctx) => {
   try {
-    const { message = {}, from = {} } = (ctx && ctx.update && ctx.update.callback_query) || {};
+    const { message, from } = ctx.update.callback_query;
 
-    const { match = [] } = ctx;
+    const { match } = ctx;
     const emo_id = (match[1] && parseInt(match[1])) || 0;
 
     if (!message.message_id || !from.id) return;
@@ -93,7 +93,7 @@ bot.action(/emo \[(\d+)\]/, async (ctx) => {
       }),
     };
 
-    await ctx.editMessageReplyMarkup(extras).catch(console.log);
+    await ctx.editMessageReplyMarkup(extras);
   } catch (e) {
     console.log(e);
   }
@@ -103,7 +103,6 @@ bot.telegram.deleteWebhook().then(
   () => bot.launch(),
   () => bot.launch()
 );
-// bot.launch();
 
 // this stucks at simple messages:
 // if (CONFIG.HTTP.WEBHOOK_HOST && CONFIG.HTTP.WEBHOOK_URL) {

@@ -67,7 +67,7 @@
     "socks-proxy-agent": "^4.0.2",
     "telegraf": "3.37.0",
     "throttle-debounce": "^2.1.0",
-    "typeorm": "^0.2.22"
+    "typeorm": "^0.2.25"
   },
   "author": "",
   "license": "ISC"
